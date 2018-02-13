@@ -6,8 +6,10 @@
 	</head>
 	<body>
 		<?php
+		echo "<pre></br>"; print_r($_POST); echo "</pre>";
 		// Vérification du mot de passe et protection contre les codes malveillants
-		if (isset($_POST['mot_de_passe']) AND htmlspecialchars($_POST['mot_de_passe']) == "kangourou")
+		// if (isset($_POST['password']) AND htmlspecialchars($_POST['password']) == "kangourou")
+		if (isset($_POST['password']) AND htmlspecialchars($_POST['password']) == "88888888")
 		{
 		// Si tout est OK, affichage des codes secrets
 		?>
@@ -30,7 +32,7 @@
 
 			<p><strong>ATTENTION</strong> A MANIPULER AVEC DISCRETION<br />
 			NE PAS METRE ENTRE TOUTES LES MAINS ;-)</p>
-		
+
 		<?php
 		}
 		else

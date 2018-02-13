@@ -1,25 +1,29 @@
 <?php
-if (isset($_GET['prenom']) AND isset($_GET['nom']) AND isset($_GET['repeter'])) // Si on a le nom et le prenom et repetitions
+
+print_r($_GET);
+
+?>
+<?php
+if (isset($_GET['prenom'], $_GET['nom'], $_GET['repeter'])) // si les variables existent et different de NULL
 {
-	// On force la conversion vers un entier. Si autre => c'est 0
+	// 1 : On force la conversion vers un entier
 	$_GET['repeter'] = (int) $_GET['repeter'];
-	
-	// Le nombre doit etre compris entre 1 et 100
+
+	// 2 : Le nombre est compris entre 1 et 100
 	if ($_GET['repeter'] >= 1 AND $_GET['repeter'] <= 100)
 	{
-		$i = 0;
-		while ($i < $_GET['repeter'])
+		echo '</br>';
+		for ($i = 0; $i < $_GET['repeter'] ; $i++)
 		{
-		echo 'Bonjour ' . $_GET['prenom'] . ' ' . $_GET['nom'] .' !<br />';
-		$i++;
+			echo 'Bonjour ' . $_GET['prenom'] . ' ' . $_GET['nom'] . ' !</br>';
 		}
+	} else
+	{
+		echo '</br>Renseignez un nombre de validations entre 1 et 100';
 	}
-	else {
-		echo 'La valeur de repetition est invalide';
-	}
-}
-else
+} else
 {
-	echo 'Il faut renseigner le nom et le prenom et le nombre de repetition!';
+	echo '</br>Il vous faut renseigner votre nom et prenom, ainsi que le nombre de repetitions ...';
 }
-?>
+
+

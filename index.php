@@ -7,9 +7,10 @@
 
     <body>
 
-    <?php include("entete.php"); ?>
 
-    <?php include("menus.php"); ?>
+    <?php //include("entete.php"); ?>
+
+    <?php //include("menus.php"); ?>
 
     <!-- Le corps -->
 
@@ -21,11 +22,11 @@
             Vous allez adorer ici, c'est un site génial qui va parler de... euh... Je cherche encore un peu le thème de mon site. :-D
         </p>
     </div>
-    <a href="bonjour.php?<a href="bonjour.php?nom=Dupont&amp;prenom=Jean">Dis-moi bonjour !</a>
-    
+    <a href="bonjour.php?nom=Dupont&amp;prenom=Jean&amp;repeter=8">Dis-moi bonjour !</a>
+
     <!-- Le pied de page -->
 
-    <?php include("footer.php"); ?>
+    <?php //include("footer.php"); ?>
 
 
     </body>
