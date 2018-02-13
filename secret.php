@@ -2,17 +2,18 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Codes secrets pour détruire la civilisation</title>
+		<title></title>
 	</head>
 	<body>
 		<?php
 		echo "<pre></br>"; print_r($_POST); echo "</pre>";
 		// Vérification du mot de passe et protection contre les codes malveillants
 		// if (isset($_POST['password']) AND htmlspecialchars($_POST['password']) == "kangourou")
-		if (isset($_POST['password']) AND htmlspecialchars($_POST['password']) == "88888888")
+		if (isset($_POST['password']) AND htmlspecialchars($_POST['password']) === "88888888")
 		{
 		// Si tout est OK, affichage des codes secrets
 		?>
+		<h1>Codes secrets pour détruire la civilisation</h1>
 			<p>Les codes secrets de destruction de notre civilisation sont les suivants :<br /></p>
 
 			<p>
