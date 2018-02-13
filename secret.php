@@ -13,7 +13,8 @@
 		{
 		// Si tout est OK, affichage des codes secrets
 		?>
-		<h1>Codes secrets pour détruire la civilisation</h1>
+
+			<h1>Codes secrets pour détruire la civilisation</h1>
 			<p>Les codes secrets de destruction de notre civilisation sont les suivants :<br /></p>
 
 			<p>
