@@ -9,13 +9,55 @@ if (empty($_COOKIE['c_pseudo']))
 	$_COOKIE['c_pseudo'] = 'nobody';
 }
 
+// Initialisation Cookie `c_message`
+if (empty($_COOKIE['c_message']))
+{
+	setcookie('c_message',  '0', $timestamp_expire, null, null, false, true);
+	$_COOKIE['c_message'] = '0';
+}
+
+// Initialisation Cookie `c_pseudo_valide`
+if (empty($_COOKIE['c_pseudo_valide']))
+{
+	setcookie('c_pseudo_valide',  '0', $timestamp_expire, null, null, false, true);
+	$_COOKIE['c_pseudo_valide'] = '0';
+}
 
 //#################################
+// Valeur du COOKIE c_pseudo_valide
+if ($_POST['pseudo'] !== '')
+{
+	setcookie('c_pseudo_valide',  '1', $timestamp_expire, null, null, false, true);
+	$_COOKIE['c_pseudo_valide'] = '1';
+}
+else if ($_COOKIE['c_pseudo_valide'] !== '0')
+{
+	setcookie('c_pseudo_valide',  '0', $timestamp_expire, null, null, false, true);
+	$_COOKIE['c_pseudo_valide'] = '0';
+
+}
+
+
 // Valeur du COOKIE c_pseudo
 if ($_POST['pseudo'] !== '' AND $_COOKIE['c_pseudo'] === 'nobody')
 {
 	setcookie('c_pseudo',  htmlspecialchars($_POST['pseudo']), $timestamp_expire, null, null, false, true);
 	$_COOKIE['c_pseudo'] = htmlspecialchars($_POST['pseudo']);
+}
+
+
+
+
+// Valeur du COOKIE c_message
+if ($_POST['message'] !== '')
+{
+	setcookie('c_message',  '1', $timestamp_expire, null, null, false, true);
+	$_COOKIE['c_message'] = '1';
+}
+else if ($_COOKIE['c_message'] !== '0')
+{
+	setcookie('c_message',  '0', $timestamp_expire, null, null, false, true);
+	$_COOKIE['c_message'] = '0';
 }
 
 
