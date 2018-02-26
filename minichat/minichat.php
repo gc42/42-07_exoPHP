@@ -36,10 +36,17 @@
 	<form method="post" action="minichat_post.php">
 		<label for="pseudo">Saisissez votre pseudo (12 caracteres maxi)</label><br />
 		<input type="text" name="pseudo" id="pseudo" placeholder="Your pseudo"
-			<?php if ($_COOKIE['c_pseudo'] !== 'nobody') {echo 'value="' . htmlspecialchars($_COOKIE['c_pseudo']) . '"';} ?>
-			size="13" maxlength="12" required onfocus="this.value=''"
-			<?php if (empty($_COOKIE['c_pseudo'])) {echo "autofocus";} ?>
-			/>
+			<?php
+				if (isset($_COOKIE['c_pseudo']) && $_COOKIE['c_pseudo'] !== 'nobody')
+				{
+					echo 'value="' . htmlspecialchars($_COOKIE['c_pseudo']) . '"';
+				}
+				else
+				{
+					echo "autofocus";
+				}
+			?>
+			size="13" maxlength="12" required onfocus="this.value=''" />
 		<br />
 		<label for="message">Rédigez votre message (255 caracteres maxi)</label><br />
 		<textarea name="message" id="message" rows="5" cols="50" maxlength="255" required autofocus></textarea><br />
@@ -54,7 +61,7 @@
 	try
 	{
 		// On etablit la connexion
-		$bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', 'toto',
+		$bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', 'root',
 			array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 	}
 	catch (Exception $e)
@@ -75,13 +82,13 @@
 	while ($donnees = $reponse->fetch())
 	{
 		echo '<p';
-		if (strtolower($donnees['pseudo']) === moi)
+		if (strtolower($donnees['pseudo']) === 'moi')
 		{
 			echo ' style="color:red;"';
 		}
 		echo '><strong>' .
 			htmlspecialchars($donnees['pseudo']) . '</strong> : ' .
-			htmlspecialchars($donnees['message']) .
+			nl2br(htmlspecialchars($donnees['message'])) .
 			'</p>';
 	}
 	$reponse->closeCursor();
@@ -92,8 +99,8 @@
 	<form method="post" action="minichat_reset.php">
 		<input type="button" name="Refresh" value="Refresh messages" onclick='window.location.reload()' id="refresh">
 		<br /><br />
+		<input type="submit" name="resetpseudo" value="Reset default pseudo" id="resetpseudo">
 		<input type="submit" name="reset" value="Reset All" id="reset">
-		<input type="submit" name="resetpseudo" value="Reset Pseudo" id="resetpseudo">
 	</form>
 
 </body>
