@@ -29,26 +29,28 @@ if ($_POST['pseudo'] !== '' AND $_COOKIE['c_pseudo'] === 'nobody')
 
 // ################################################################
 // BDD: Insertion dans la table `minichat` du nouvel enregistrement
-if (!empty($_POST['pseudo']) AND !empty($_POST['message']))
+if (    !empty($_POST['pseudo']) AND !empty($_POST['message']) AND
+	     isset($_POST['pseudo']) AND isset($_POST['message'])    )
 {
 	// 0 : Memo des parametres post
  	$pseudo  = $_POST['pseudo'];
 	$message = $_POST['message'];
 
-	// 1 : Connexion a la base de donnees, en mode error visible
-	try
-	{
-		$bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', 'root',
-			array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-	}
+	// 1 : Connexion BDD
+	require_once('minichat_bdd.php');
 
 	// 2 : Requete preparee pour l'ajout des donnees dans la table
-	$req = $bdd->prepare('INSERT INTO minichat (pseudo, message) VALUES(:new_pseudo, :new_message)');
-	$req->execute(array('new_pseudo'  => $pseudo, 'new_message' => $message));
+	$request = $bdd->prepare('INSERT INTO minichat (pseudo, message) VALUES(:new_pseudo, :new_message)');
+	$request->execute(array(
+		'new_pseudo'  => $pseudo,
+		'new_message' => $message,
+	));
+
+	// ALTERNATIVE : autre façon de l'écrire, avec "bindValue"
+	// $request->bindValue('pseudo', $_POST['pseudo']);
+	// $request->bindValue('message', $_POST['message']);
+	// $request->execute();
+
 	$req->closeCursor();
 }
 

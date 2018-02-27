@@ -6,19 +6,7 @@
 	if ($_POST['reset'] == "Reset All")
 	{
 		// 2 : Connexion a la base de donnees
-		try
-		{
-			// On etablit la connexion
-			$bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', 'root',
-				array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-		}
-		catch (Exception $e)
-		{
-			// En cas d'erreur, affichage d'un message et on stoppe tout
-			die('Erreur : ' . $e->getMessage());
-		}
-
-
+		require_once('minichat_bdd.php');
 		
 
 		// 3 : Requete de suppression des messages 
