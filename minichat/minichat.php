@@ -1,39 +1,28 @@
 <?php
-// TEST: Affichage des COOKIES
-// echo "<pre>COOKIE: "; print_r($_COOKIE); echo "</pre>";
-// echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
+	// TEST: Affichage des COOKIES
+	// echo "<pre>COOKIE: "; print_r($_COOKIE); echo "</pre>";
+	// echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
+
+	// 1 : Connexion BDD
+	require_once('minichat_bdd.php');
+	
+
+	// 2 : Recupere les 10 derniers messages 
+	$reponse = $bdd->query('SELECT pseudo, message, DATE_FORMAT(date_creation, "%d/%m/%Y &agrave; %Hh%i") AS date FROM minichat ORDER BY id DESC LIMIT 0, 10');
 ?>
+
+
+
+
+<!-- Affichage formulaire-->
 
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<title>Minichat</title>
-	<style type="text/css">
-		label {
-			font-size: small;
-		}
-		#valider, #refresh {
-			color: black;
-			background-color: lightgrey;
-			border-radius: 20px;
-			box-shadow: 4px 4px 8px #888888;
-		}
-		#valider {
-			margin-left: 265px;
-		}
-		#reset, #resetpseudo  {
-			color: red;
-			background-color: white;
-			border-radius: 20px;
-			box-shadow: 4px 4px 8px #888888;
-		}
-		.date
-		{
-		    font-size: x-small;
-		    color: #777777;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="minichat_css.css">
+	
 </head>
 <body>
 	<h1>Minichat'</h1>
@@ -58,22 +47,17 @@
 			size="13" maxlength="12" required onfocus="this.value=''" />
 		<br />
 		<label for="message">Rédigez votre message (255 caracteres maxi)</label><br />
-		<textarea name="message" id="message" rows="5" cols="50" maxlength="255" required autofocus></textarea><br />
+		<textarea name="message" id="message" rows="5" cols="50" maxlength="255" placeholder="Your message" required autofocus></textarea><br />
 		<input type="submit" name="Valider" value="Valider" id="valider">
 	</form>
 
 
 
 
+<!-- Affichage de l'historique des messages -->
+	
+
 	<?php
-	// 1 : Connexion BDD
-	require_once('minichat_bdd.php');
-	
-
-	// 2 : Recupere les 10 derniers messages 
-	$reponse = $bdd->query('SELECT pseudo, message, DATE_FORMAT(date_creation, "%d/%m/%Y &agrave; %Hh%i") AS date FROM minichat ORDER BY id DESC LIMIT 0, 10');
-	
-
 	// 3 : Affichage des resultats
 	while ($donnees = $reponse->fetch())
 	{

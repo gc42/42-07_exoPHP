@@ -51,7 +51,7 @@ if (    !empty($_POST['pseudo']) AND !empty($_POST['message']) AND
 	// $request->bindValue('message', $_POST['message']);
 	// $request->execute();
 
-	$req->closeCursor();
+	$request->closeCursor();
 }
 
 // Redirection du visiteur vers la page du minichat'
