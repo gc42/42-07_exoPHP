@@ -1,0 +1,23 @@
+label {
+	font-size: small;
+}
+#valider, #refresh {
+	color: black;
+	background-color: lightgrey;
+	border-radius: 20px;
+	box-shadow: 4px 4px 8px #888888;
+}
+#valider {
+	margin-left: 265px;
+}
+#reset, #resetpseudo  {
+	color: red;
+	background-color: white;
+	border-radius: 20px;
+	box-shadow: 4px 4px 8px #888888;
+}
+.date
+{
+    font-size: x-small;
+    color: #777777;
+}
