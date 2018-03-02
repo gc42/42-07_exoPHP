@@ -19,14 +19,15 @@ if (isset($_GET['reset']) && $_GET['reset'] == "resetAll")
 if (isset($_POST['submit']) && $_POST['submit'] == "Valider")
 {
     // Create the cookie if nessessary
-    if (isset($_COOKIE['c_pseudo']) || empty($_COOKIE['c_pseudo']))
+    if (!(isset($_COOKIE['c_pseudo'])) || empty($_COOKIE['c_pseudo']))
     {
         createCookie();
     }
 
     // Set the current cookie value if pseudo exist
-    if ($_POST['pseudo'] !== '' && $_COOKIE['c_pseudo'] === 'nobody')
+    if ($_POST['pseudo'] !== '' && $_COOKIE['c_pseudo'] === 'nobody' )
     {
+        //&& !($_POST['pseudo'] !== $_COOKIE['c_pseudo'])
         setCookieValue();
     }
 

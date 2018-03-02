@@ -1,23 +1,21 @@
 
+<?php ob_start(); ?>
 <?php
 // TEST: Affichage des COOKIES
 echo "<pre>COOKIE: "; print_r($_COOKIE); echo "</pre>";
 echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
 ?>
+<?php $TEST_displayGLOBALS = ob_get_clean(); ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Minichat</title>
-	<link rel="stylesheet" type="text/css" href="minichat.css">
-	
-</head>
-<body>
+
+<?php $title = "Minichat'"; ?>
+
+
+<?php ob_start(); ?>
 	<h1>Minichat'</h1>
-	Le plus grand site d'echange de blabla dans l'univers !<br /><i>Enjoy and be happy to diffuse ;-)</i><br /><br />
+	<p>Le plus grand site d'echange de blabla dans l'univers !<br /><i>Enjoy and be happy to diffuse ;-)</i><br /><br /></p>
 
-	<!-- Le formulaire -->
+	<!-- Display form for new post -->
 	<form method="post" action="index.php">
 		<label for="pseudo">Saisissez votre pseudo (12 caracteres maxi)</label><br />
 		<input type="text" name="pseudo" id="pseudo" placeholder="Your pseudo"
@@ -39,13 +37,12 @@ echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
 		<textarea name="message" id="message" rows="5" cols="50" maxlength="255" placeholder="Your message" required autofocus></textarea><br />
 		<input type="submit" name="submit" value="Valider" id="valider">
 	</form>
+<?php $form_new_post = ob_get_clean(); ?>
 
 
 
-
-<!-- Display posts history -->
-	
-
+<!-- Display liost of old posts -->
+<?php ob_start(); ?>
 	<?php
 	// 0 : Display quiery result
 	while ($data = $posts->fetch())
@@ -79,16 +76,17 @@ echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
 	}
 	$posts->closeCursor();
 	?>
+<?php $list_old_posts = ob_get_clean(); ?>	
 
 
-	<!-- The buttons reset & refresh -->
-	<!-- <form method="post" action="minichat_reset.php"> -->
+<!-- The buttons reset & refresh -->
+<?php ob_start(); ?>
 	<form method="get" action="">
 		<input type="button" name="refresh" value="refreshMessages" onclick='window.location.reload()' id="refresh">
 		<br /><br />
 		<input type="submit" name="reset" value="resetPseudo" id="resetpseudo">
 		<input type="submit" name="reset" value="resetAll" id="reset">
 	</form>
+<?php $form_reset = ob_get_clean(); ?>
 
-</body>
-</html>
+<?php require('template.php'); ?>
