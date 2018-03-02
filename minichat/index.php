@@ -1,51 +1,26 @@
 <?php
-require('minichat_model.php');
+require('controller.php');
 
-// Reset pseudo only
-if (isset($_GET['reset']) && $_GET['reset'] == "resetPseudo")
+// On reset pseudo only
+if (isset($_GET['reset']))
 {
-    resetCookie();
-}
-
-// Reset All: delete pseudo and entries in database
-if (isset($_GET['reset']) && $_GET['reset'] == "resetAll")
-{
-    $nbr_of_keeped_entries = 5;
-    resetCookie();
-    resetData($nbr_of_keeped_entries);
-}
-
-// Manage COOKIE
-if (isset($_POST['submit']) && $_POST['submit'] == "Valider")
-{
-    // Create the cookie if nessessary
-    if (!(isset($_COOKIE['c_pseudo'])) || empty($_COOKIE['c_pseudo']))
+    if ($_GET['reset'] == "resetPseudo")
     {
-        createCookie();
+        resetPseudo();
     }
-
-    // Set the current cookie value if pseudo exist
-    if ($_POST['pseudo'] !== '' && $_COOKIE['c_pseudo'] === 'nobody' )
+    elseif ($_GET['reset'] == "resetAll")
     {
-        //&& !($_POST['pseudo'] !== $_COOKIE['c_pseudo'])
-        setCookieValue();
-    }
-
-    // Add new entries in database
-    if (    isset($_POST['pseudo'])  &&
-            isset($_POST['message']) &&
-            !empty($_POST['pseudo']) &&
-            !empty($_POST['message']) 
-        )
-    {
-        // 0 : Remember POST parameters
-		$pseudo  = $_POST['pseudo'];
-        $message = $_POST['message'];
-        
-        addNewPosts($pseudo, $message);
+        resetAll();
     }
 }
-
-$posts = getPosts();
-
-require('indexView.php');
+elseif (isset($_POST['submit']))
+{
+    if  ($_POST['submit'] == "Valider")
+    {
+        OnValidate();
+    }
+}
+else
+{
+    listPosts();
+}
