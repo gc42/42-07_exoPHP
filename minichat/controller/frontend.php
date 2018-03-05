@@ -1,12 +1,12 @@
 <?php
-require('minichat_model.php');
+require('model/frontend.php');
 
 function resetPseudo()
 {
     resetCookie();
  
     $posts = getPosts();
-    require('indexView.php');
+    require('view/frontend/listPostsView.php');
 }
 
 function resetAll()
@@ -16,7 +16,7 @@ function resetAll()
     resetData($nbr_of_keeped_entries);
 
     $posts = getPosts();
-    require('indexView.php');
+    require('view/frontend/listPostsView.php');
 }
 
 function OnValidate()
@@ -48,13 +48,13 @@ function OnValidate()
     }
 
     $posts = getPosts();
-    require('indexView.php');
+    require('view/frontend/listPostsView.php');
 
 }
 
 function listPosts()
 {
     $posts = getPosts();
-    require('indexView.php');
+    require('view/frontend/listPostsView.php');
  
 }

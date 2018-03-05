@@ -21,3 +21,7 @@ label {
     font-size: x-small;
     color: #777777;
 }
+.message
+{
+	font-size: small;
+}

@@ -4,6 +4,7 @@
 // TEST: Affichage des COOKIES
 echo "<pre>COOKIE: "; print_r($_COOKIE); echo "</pre>";
 echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
+// echo "<pre>GET: ";    print_r($_GET);    echo "</pre>";
 ?>
 <?php $TEST_displayGLOBALS = ob_get_clean(); ?>
 
@@ -17,6 +18,8 @@ echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
 
 	<!-- Display form for new post -->
 	<form method="post" action="index.php">
+		<fieldset>
+		<legend>Rédigez votre message puis validez:</legend>
 		<label for="pseudo">Saisissez votre pseudo (12 caracteres maxi)</label><br />
 		<input type="text" name="pseudo" id="pseudo" placeholder="Your pseudo"
 			<?php
@@ -35,7 +38,8 @@ echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
 		<br />
 		<label for="message">Rédigez votre message (255 caracteres maxi)</label><br />
 		<textarea name="message" id="message" rows="5" cols="50" maxlength="255" placeholder="Your message" required autofocus></textarea><br />
-		<input type="submit" name="submit" value="Valider" id="valider">
+		<input type="submit" name="action" value="Valider" id="valider">
+		</fieldset>		
 	</form>
 <?php $form_new_post = ob_get_clean(); ?>
 
@@ -49,12 +53,7 @@ echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
 	{
 	?>
 		<p>
-		<!-- 1 : The date -->
-		<i><span class="date">
-		<?= $data['date']; ?>
-		</span></i>&nbsp;&nbsp;&nbsp;
-
-		<!-- 2 : The pseudo, in coulor if it is the current pseudo -->
+		<!-- 1 : The pseudo, in coulor if it is the current pseudo -->
 		<span
 			<?php
 				if (    isset($_COOKIE['c_pseudo'])
@@ -65,12 +64,13 @@ echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
 				}
 			?>
 		>
-		<strong>
-		<?= htmlspecialchars($data['pseudo']); ?>
-		</strong> : </span>
+		<strong><?= htmlspecialchars($data['pseudo']); ?></strong> : </span>
+
+		<!-- 2 : The date -->
+		<i><span class="date"><?= $data['date']; ?></span></i><br />
 
 		<!-- 3 : The message -->
-		<?= nl2br(htmlspecialchars($data['message'])); ?>
+		<span class="message"><?= nl2br(htmlspecialchars($data['message'])); ?></span>
 		</p>
 	<?php
 	}
@@ -82,11 +82,11 @@ echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
 <!-- The buttons reset & refresh -->
 <?php ob_start(); ?>
 	<form method="get" action="">
-		<input type="button" name="refresh" value="refreshMessages" onclick='window.location.reload()' id="refresh">
+		<input type="button" name="action" value="refresh"  id="refresh"><!--onclick='window.location.reload()'-->
 		<br /><br />
-		<input type="submit" name="reset" value="resetPseudo" id="resetpseudo">
-		<input type="submit" name="reset" value="resetAll" id="reset">
+		<input type="submit" name="action" value="resetPseudo" id="resetpseudo">
+		<input type="submit" name="action" value="resetAll" id="reset">
 	</form>
 <?php $form_reset = ob_get_clean(); ?>
 
-<?php require('template.php'); ?>
+<?php require('view/frontend/template.php'); ?>

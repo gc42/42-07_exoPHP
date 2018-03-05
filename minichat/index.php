@@ -1,21 +1,24 @@
 <?php
-require('controller.php');
+require('controller/frontend.php');
 
-// On reset pseudo only
-if (isset($_GET['reset']))
+if (isset($_GET['action']))
 {
-    if ($_GET['reset'] == "resetPseudo")
+    if ($_GET['action'] ==       "resetPseudo")
     {
         resetPseudo();
     }
-    elseif ($_GET['reset'] == "resetAll")
+    elseif ($_GET['action'] ==   "resetAll")
     {
         resetAll();
     }
+    elseif ($_GET['action'] ==   "refresh")
+    {
+        listPosts();
+    }
 }
-elseif (isset($_POST['submit']))
+elseif (isset($_POST['action']))
 {
-    if  ($_POST['submit'] == "Valider")
+    if  ($_POST['action'] == "Valider")
     {
         OnValidate();
     }
