@@ -34,10 +34,10 @@ echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
 					echo "autofocus";
 				}
 			?>
-			size="13" maxlength="12" required onfocus="this.value=''" />
+			size="13" maxlength="12" onfocus="this.value=''" /><!-- required   -->
 		<br />
 		<label for="message">Rédigez votre message (255 caracteres maxi)</label><br />
-		<textarea name="message" id="message" rows="5" cols="50" maxlength="255" placeholder="Your message" required autofocus></textarea><br />
+		<textarea name="message" id="message" rows="5" cols="50" maxlength="255" placeholder="Your message"  autofocus></textarea><br /><!-- required -->
 		<input type="submit" name="action" value="Valider" id="valider">
 		</fieldset>		
 	</form>

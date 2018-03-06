@@ -4,7 +4,7 @@ function dbConnect()
 	$host    = 'localhost';	// Data base host address
 	$bddname = 'test';		// Data base name
 	$user    = 'root';		// Data base user name
-	$pass    = 'root';		// Data base pass word ('root' à la maison; 'toto' à 42)
+	$pass    = 'toto';		// Data base pass word ('root' à la maison; 'toto' à 42)
 	
 	try
 	{
