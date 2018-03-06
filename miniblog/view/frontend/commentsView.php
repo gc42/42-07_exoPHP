@@ -51,4 +51,25 @@ while ($data = $comments->fetch())
 ?>
 <?php $content = ob_get_clean(); ?>
 
+<?php ob_start(); ?>
+<fieldset>
+	<legend><i>Pour ajouter un commentaire, replissez les champs puis validez:</i></legend>
+    <form action="index.php?action=addComment&amp;id=<?= $post['id'] ?>"
+        method="post">
+        <div>
+            <label for="author">Auteur</label><br />
+            <input type="text" id="author" name="author" />
+        </div>
+        <div>
+            <label for="comment">Commentaire</label><br />
+            <textarea id="comment" name="comment"></textarea>
+        </div>
+        <div>
+            <input type="submit" value="Envoyer" />
+        </div>
+    </form>
+</fieldset>
+
+<?php $form_newComment = ob_get_clean(); ?>
+
 <?php require('view/frontend/template.php'); ?>

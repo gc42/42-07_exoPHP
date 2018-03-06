@@ -8,6 +8,7 @@
 </head>
 <body>
     <?= $content ?>
+	<?= $form_newComment ?>
 
 </body>
 </html>

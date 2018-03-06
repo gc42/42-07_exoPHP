@@ -63,3 +63,20 @@ function getComments($postId)
     
     return $comments;
 }
+
+
+
+
+function postComment($postId, $author, $comment)
+{
+    $db = dbConnect();
+    $comments = $db->prepare('INSERT INTO blog_comments (id_post, author, comment, comment_date) VALUES(:new_id, :new_author, :new_comment, NOW())');
+	$affectedLines = $comments->execute(array(
+        'new_id'      => $postId,
+		'new_author'  => $author,
+		'new_comment' => $comment,
+    ));
+    
+    return $affectedLines;
+}
+
