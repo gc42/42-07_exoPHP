@@ -2,7 +2,7 @@
 
 <?php ob_start(); ?>
 <h1>Mon super blog !</h1>
-<p><a href="index.php">Retour vers les news</a></p>
+<p><a href="index.php?listPosts">Retour vers les news</a></p>
 
 
 <!-- DISPLAY SELECTED POST -->

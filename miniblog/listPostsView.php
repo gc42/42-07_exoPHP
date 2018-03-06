@@ -24,7 +24,7 @@ while ($data = $posts->fetch())
 			
 			<!-- link go to comments -->
 			<br />
-			<a href="comments.php?postId=<?php echo $data['id']; ?>">Voir les commentaires</a>
+			<a href="index.php?action=post&amp;id=<?= $data['id']; ?>">Voir les commentaires</a>
 		</p>
 	</div>
 
