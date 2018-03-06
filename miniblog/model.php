@@ -23,9 +23,9 @@ function getPosts()
     $db = dbConnect();
     
     // Find the last posts
-    $req = $db->query('SELECT id, title, content, DATE_FORMAT(creation_date, "%d/%b/%Y à %Hh%i et %s\'\'")  AS creation_date_fr FROM blog_posts ORDER BY creation_date DESC LIMIT 0, 5');
+    $posts = $db->query('SELECT id, title, content, DATE_FORMAT(creation_date, "%d/%b/%Y à %Hh%i et %s\'\'")  AS creation_date_fr FROM blog_posts ORDER BY creation_date DESC LIMIT 0, 5');
         
-    return $req;
+    return $posts;
 }
 
 

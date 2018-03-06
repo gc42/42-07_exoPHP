@@ -11,7 +11,7 @@
 	<p><a href="index.php">Retour vers les news</a></p>
 
 
-<!-- AFFICHAGE DE LA NEWS SELECTIONNEE -->
+<!-- DISPLAY SELECTED POST -->
 	<div class="news">
         <h3>
             <?= htmlspecialchars($post['title']); ?>
@@ -27,14 +27,12 @@
 	
 
 
-<!-- AFFICHAGE DES COMMENTAIRES -->
+<!-- DISPLAY COMMENTS RELATED WITH SELECTED POST -->
 	<h2>Commentaires</h2>
 
 	<?php
-	// 3 : Afficher les resultats
 	while ($data = $comments->fetch())
 	{
-        // echo "<pre>"; print_r($data); echo "</pre>";
 	?>
 
 		<div class="commentaires">
