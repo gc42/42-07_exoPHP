@@ -10,9 +10,9 @@
 	<h1>Mon super blog !</h1>
 	<p>Derniers billets du blog :</p>
 
+<!-- Display all posts -->
 	<?php
-	// 3 : Display results
-	while ($data = $posts->fetch())
+	while ($data = $req->fetch())
 	{
 	?>		
 	
@@ -30,13 +30,12 @@
 				
 				<!-- link to comments -->
 				<br />
-				<a href="comments.php?news=<?php echo $data['id']; ?>">Voir les commentaires</a>
+				<a href="comments.php?postId=<?php echo $data['id']; ?>">Voir les commentaires</a>
 			</p>
 		</div>
 	
 	<?php
 	}
-	$posts->closeCursor();
 	?>
 
 </body>

@@ -1,5 +1,5 @@
 <?php
-function connect_db()
+function dbConnect()
 {
     try
     {
@@ -20,25 +20,25 @@ function connect_db()
 
 function getPosts()
 {
-    $db = connect_db();
+    $db = dbConnect();
     
     // Find the last posts
-    $posts = $db->query('SELECT id, title, content, DATE_FORMAT(creation_date, "%d/%b/%Y à %Hh%i et %s\'\'")  AS creation_date_fr FROM blog_posts ORDER BY creation_date DESC LIMIT 0, 5');
+    $req = $db->query('SELECT id, title, content, DATE_FORMAT(creation_date, "%d/%b/%Y à %Hh%i et %s\'\'")  AS creation_date_fr FROM blog_posts ORDER BY creation_date DESC LIMIT 0, 5');
         
-    return $posts;
+    return $req;
 }
 
 
 
 
 
-function getPost()
+function getPost($postId)
 {
-    $db = connect_db();
+    $db = dbConnect();
     
     // Find the selected post
  	$req = $db->prepare('SELECT title, content, DATE_FORMAT(creation_date, "%d/%b/%Y à %Hh%i et %s\'\'")  AS creation_date_fr FROM blog_posts WHERE id = ?');
-    $req->execute(array($_GET['news']));
+    $req->execute(array($postId));
     $post = $req->fetch(); // Because only one result
     
     return $post;
@@ -48,9 +48,9 @@ function getPost()
 
 
 
-function getComments()
+function getComments($postId)
 {
-    $db = connect_db();
+    $db = dbConnect();
 
     // Find related comments
     $comments = $db->prepare('SELECT author, comment, DATE_FORMAT(comment_date, "%d/%b/%Y à %Hh%i et %s\'\'")  AS comment_date_fr
@@ -59,7 +59,7 @@ function getComments()
     ORDER BY comment_date DESC
     LIMIT 0, 10
     ');
-    $comments->execute(array($_GET['news']));
-        
+    $comments->execute(array($postId));
+    
     return $comments;
 }
