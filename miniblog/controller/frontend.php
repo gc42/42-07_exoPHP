@@ -22,7 +22,8 @@ function addComment($postId, $author, $comment)
 
     if ($affectedLines === false)
     {
-        die('Impossible d\'ajouter le commentaire !');
+        // Error intercepted and send back to the "try" of the rooter
+        throw new Exception('Impossible d\'ajouter le commentaire !');
     }
     else {
         header('Location: index.php?action=post&id=' . $postId);

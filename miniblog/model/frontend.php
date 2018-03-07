@@ -1,18 +1,12 @@
 <?php
 function dbConnect()
 {
-    try
-    {
-        // DB connexion
-        $db = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', 'toto',
-            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-    }
-    catch (Exception $e)
-    {
-        // If error, display message and stop all
-        die('Erreur : ' . $e->getMessage());
-    }
+    // DB connexion
+    $db = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', 'toto',
+        array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
     return $db;
+    // Traitement des erreurs inutile car repris par throw/try dans le rooter
 }
 
 

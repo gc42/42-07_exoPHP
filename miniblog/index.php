@@ -1,43 +1,53 @@
 <?php
 require('controller/frontend.php');
 
-if (isset($_GET['action']))
-{
-    if ($_GET['action'] == 'listPosts')
+try {       // DEBUT DES ESSAIS
+    if (isset($_GET['action']))
     {
-            listPosts();
-    }
-    elseif ($_GET['action'] == 'post')
-    {
-        if (isset($_GET['id']) && $_GET['id'] > 0)
+        if ($_GET['action'] == 'listPosts')
         {
-            post();
+                listPosts();
         }
-        else
+        elseif ($_GET['action'] == 'post')
         {
-            echo 'Erreur : aucun identifiant de billet envoye';
-        }
-    }
-    elseif ($_GET['action'] == 'addComment')
-    {
-        if (isset($_GET['id']) && $_GET['id'] > 0)
-        {
-            if (!empty($_POST['author']) && !empty($_POST['comment']))
+            if (isset($_GET['id']) && $_GET['id'] > 0)
             {
-                addComment($_GET['id'], $_POST['author'], $_POST['comment']);
+                post();
             }
             else
             {
-                echo 'Erreur : tous les champs ne sont pas remplis !';
+                // Error ! Stop all and return exception => jump to catch
+                throw new Exception('Aucun identifiant de billet envoye');
             }
         }
-        else
+        elseif ($_GET['action'] == 'addComment')
         {
-            echo 'Erreur : aucun identifiant de billet envoyé';
+            if (isset($_GET['id']) && $_GET['id'] > 0)
+            {
+                if (!empty($_POST['author']) && !empty($_POST['comment']))
+                {
+                    addComment($_GET['id'], $_POST['author'], $_POST['comment']);
+                }
+                else
+                {
+                    // Error ! Stop all and return exception => jump to catch
+                    throw new Exception('Tous les champs ne sont pas remplis !');
+                }
+            }
+            else
+            {
+                // Error ! Stop all and return exception => jump to catch
+                throw new Exception('Aucun identifiant de billet envoyé');
+            }
         }
     }
+    else
+    {
+        listPosts();
+    }
 }
-else
+catch(Exception $e)
 {
-    listPosts();
+    $errorMessage = $e->getMessage();
+    require('view/errorView.php');
 }

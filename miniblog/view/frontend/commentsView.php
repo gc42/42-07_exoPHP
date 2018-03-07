@@ -54,7 +54,8 @@ while ($data = $comments->fetch())
 <?php ob_start(); ?>
 <fieldset>
 	<legend><i>Pour ajouter un commentaire, replissez les champs puis validez:</i></legend>
-    <form action="index.php?action=addComment&amp;id=<?= $post['id'] ?>"
+    <pre> <?= print_r($_GET); ?> </pre>
+    <form action="index.php?action=addComment&amp;id=<?= $_GET['id'] ?>"
         method="post">
         <div>
             <label for="author">Auteur</label><br />
@@ -65,6 +66,7 @@ while ($data = $comments->fetch())
             <textarea id="comment" name="comment"></textarea>
         </div>
         <div>
+            <input type="hidden" name="oldAction" value="<?= $_GET['action'] ?>">
             <input type="submit" value="Envoyer" />
         </div>
     </form>
