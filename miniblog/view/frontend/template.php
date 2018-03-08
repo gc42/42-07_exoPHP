@@ -8,7 +8,17 @@
 </head>
 <body>
     <?= $content ?>
-	<?= $form_newComment ?>
+		
+	<?php
+	if (isset($_GET['action']) && $_GET['action'] == 'edit')
+	{
+		echo $form_updateComment;
+	}
+	else
+	{
+		echo $form_newComment;
+	}
+	?>
 
 </body>
 </html>
