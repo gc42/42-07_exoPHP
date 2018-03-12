@@ -1,10 +1,10 @@
 <?php $title = 'Mini-blog'; ?>
 
 <?php ob_start(); ?>
-<h2>Mon super blog !</h2>
+<h2>Mon mini-blog !</h2>
 <p>Derniers billets du blog :</p>
 
-<!-- <pre> <?= print_r($_GET); ?> </pre> -->
+
 <!-- DISPLAY ALL POSTS -->
 <?php
 while ($data = $posts->fetch())
@@ -38,7 +38,9 @@ while ($data = $posts->fetch())
 				else
 				{
 				?>
-					( <a href="index.php?action=wantDeletePost&amp;id=<?= $data['id'] ?>">Supprimer cette news</a> )
+					<span class="suppr">
+						( <a href="index.php?action=wantDeletePost&amp;id=<?= $data['id'] ?>">Supprimer cette news</a> )
+					</span>
 				<?php
 				}
 			?>

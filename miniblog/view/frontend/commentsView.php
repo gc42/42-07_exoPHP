@@ -2,7 +2,7 @@
 
 <?php ob_start(); ?>
 <h1>Mon mini-blog !</h1>
-<p><a href="index.php">Retour vers les news</a></p>
+<p class="retour"><a href="index.php">< Retour vers les news</a></p>
 
 
 
@@ -44,14 +44,18 @@ while ($data = $comments->fetch())
                     <?php
                         if ($_GET['action'] == "wantDeleteComment" AND $_GET['id_comment'] == $data['id_comment'])
                         {
-                        ?>        
+                        ?>
+                        <span class="suppr">    
                             ( <a href="index.php?action=deleteComment&amp;id_comment=<?= $data['id_comment']; ?>&amp;id=<?= $_GET['id'] ?>" style="color:red;">Confirmer suppression</a> )
+                        </span>
                         <?php
                         }
                         else
                         {
                         ?>
+                        <span class="suppr">
                             ( <a href="index.php?action=wantDeleteComment&amp;id_comment=<?= $data['id_comment']; ?>&amp;id=<?= $_GET['id'] ?>">Supprimer</a> )
+                        </span>
                         <?php
                         }
                     ?>

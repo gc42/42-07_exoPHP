@@ -1,17 +1,28 @@
-h1, h3
+body {
+    margin-left: 90px;
+}
+h1, h2, h3,
 {
-    text-align:center;
+    text-align: center;
+}
+h2
+{
+    margin-top:  30px;
+    margin-bottom:0px;
 }
 h3
 {
-    background-color: beige;
+    background-color: rgb(10, 92, 92);
     color:white;
     font-size:0.9em;
     margin-bottom:0px;
+    padding-left:  10px;
+    padding-right: 10px;
+
 }
 .news p
 {
-    background-color:#CCCCCC;
+    background-color:rgb(169, 197, 197);
     margin-top:0px;
     padding-left:  10px;
     padding-right: 10px;
@@ -20,7 +31,8 @@ h3
 {
     width:70%;
     max-width: 500px;
-    margin:auto;
+    /* margin:auto; */
+    /* margin-left: 90px; */
 }
 
 a
@@ -30,10 +42,13 @@ a
 }
 .commentaires
 {
-    background-color: #CCCCCC;
+    background-color: rgb(212, 231, 231);
     width: 85%;
     max-width: 570px;
     border-radius: 5px;
+    padding-left:  10px;
+    padding-right: 10px;
+
     /*margin-bottom: 5px;*/
 }
 .who
@@ -46,5 +61,9 @@ a
 {
     float: right;
     font-size: x-small;
-    color: orange;
+    /* color: orange; */
+}
+.retour
+{
+    margin-left: -70px;
 }
