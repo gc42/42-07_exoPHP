@@ -30,7 +30,7 @@ class CommentManager extends Manager
 
 
     /**
-     * Select comments related by selected post
+     * Select edited comment
      * 
      * @param int $postId The Id of selected post
      */
@@ -39,15 +39,14 @@ class CommentManager extends Manager
         $db = $this->dbConnect();
     
         // Find related comments
-        $comment = $db->prepare('SELECT id AS id_comment, author, comment, DATE_FORMAT(comment_date, "%d/%b/%Y à %Hh%i et %s\'\'")  AS comment_date_fr
+        $editedComment = $db->prepare('SELECT id AS id_comment, author, comment
         FROM blog_comments
-        WHERE id_comment = ?
-        ORDER BY comment_date DESC
-        LIMIT 0, 10
+        WHERE id = ?
         ');
-        $comment->execute(array($id_comment));
+        $editedComment->execute(array($id_comment));
+        $editedComment = $editedComment->fetch();
         
-        return $comment;
+        return $editedComment;
     }
     
     
@@ -82,19 +81,23 @@ class CommentManager extends Manager
      */
     
     
-    public function upComment($id_comment, $comment)
+    public function updateComment($id_comment, $comment)
     {
         $db = $this->dbConnect();
         $modifiedcomment = $db->prepare('UPDATE blog_comments SET
                                 comment = :modif_comment,
                                 comment_date = NOW()
-                                WHERE id = $id_comment
+                                WHERE id = :id_comment
                                 ');
-
-        $modifiedcomment->bindParam('modif_comment', $comment,    PDO::PARAM_STR); // string
-        $modifiedcomment->bindParam(':id_comment', $id_comment, PDO::PARAM_INT); // entier
         
-        $affectedLines = $modifiedcomment->execute();
+        // $modifiedcomment->bindParam('modif_comment', $comment,  PDO::PARAM_STR); // string
+        // $modifiedcomment->bindParam('id_comment', $id_comment,  PDO::PARAM_INT); // entier
+        // $affectedLines = $modifiedcomment->execute();
+        
+        $affectedLines = $modifiedcomment->execute(array(
+            'modif_comment' => $comment,
+            'id_comment' => $id_comment,
+        ));
         
         return $affectedLines;
     }

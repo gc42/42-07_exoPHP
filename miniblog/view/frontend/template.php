@@ -10,15 +10,19 @@
     <?= $content ?>
 		
 	<?php
-	if (isset($_GET['action']) && $_GET['action'] == 'edit')
+	if (isset($_GET['action']) && $_GET['action'] == 'editComment')
 	{
-		echo $form_updateComment;
+		echo $form_update;
 	}
 	else
 	{
-		echo $form_newComment;
+		echo $form_new;
 	}
 	?>
 
+
+
+<pre> Get:<?= print_r($_GET); ?> </pre>
+<pre> Post:<?= print_r($_POST); ?> </pre>
 </body>
 </html>

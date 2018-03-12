@@ -19,7 +19,67 @@ function listPosts()
 
 
 /**
- * Extract selected post and related comments and display on comment page
+ * Insert new post in database
+ * 
+ * @param string $author  The author of the new post.
+ * @param string $comment The text of the new post.
+ */
+function addPost($author, $title, $content)
+{
+    $postManager = new \Guillaume\miniBlog\Model\PostManager(); // Creation d'une instance
+    
+    $affectedLines = $postManager->addPost($author, $title, $content);
+
+    if ($affectedLines === false)
+    {
+        // Error intercepted and send back to the "try" of the rooter
+        throw new Exception('Impossible d\'ajouter une news !');
+    }
+    else {
+        header('Location: index.php');
+    }
+}
+
+
+
+
+/**
+ * Delete selected post in database
+ * 
+ * @param int    $postId      The Id of selected post.
+ */
+function deletePost($postId)
+{
+    $postManager = new \Guillaume\miniBlog\Model\PostManager(); // Creation d'une instance
+    
+    $affectedLines = $postManager->delAllPostComments($postId);
+
+    if ($affectedLines === false)
+    {
+        // Error intercepted and send back to the "try" of the rooter
+        throw new Exception('Impossible de supprimer les commentaires associés a cette news ! (controller/frondend/delAllPostComments)');
+    }
+    else
+    {
+        $affectedLines = $postManager->delPost($postId);
+        
+        if ($affectedLines === false)
+        {
+            // Error intercepted and send back to the "try" of the rooter
+            throw new Exception('Impossible de supprimer cette news ! (controller/frondend/delPost)');
+        }
+        else
+        {
+            header('Location: index.php');
+        }
+    }
+}
+
+
+
+
+/**
+ * Extract selected post and all related comments and display on comment page
  */
 function post()
 {
@@ -32,20 +92,24 @@ function post()
     require('view/frontend/commentsView.php');
 }
 
+
+
+
 /**
  * Extract selected post and related comments AND EDITED COMMENT and display on comment page
  */
-function edit()
+function editComment()
 {
     $postManager    = new \Guillaume\miniBlog\Model\PostManager();    // Creation d'une instance
     $commentManager = new \Guillaume\miniBlog\Model\CommentManager(); // Creation d'une instance
     
-    $post     = $postManager->getPost($_GET['id']);
-    $comments = $commentManager->getComments($_GET['id']);
-    $edit     = $commentManager->getComment($_GET['id_comment']);
+    $post           = $postManager->getPost($_GET['id']);
+    $comments       = $commentManager->getComments($_GET['id']);
+    $editedComment  = $commentManager->getComment($_GET['id_comment']);
 
     require('view/frontend/commentsView.php');
 }
+
 
 
 
@@ -86,7 +150,7 @@ function updateComment($postId, $id_comment, $comment)
 {
     $commentManager = new \Guillaume\miniBlog\Model\CommentManager(); // Creation d'une instance
     
-    $affectedLines = $commentManager->upComment($id_comment, $comment);
+    $affectedLines = $commentManager->updateComment($id_comment, $comment);
 
     if ($affectedLines === false)
     {
@@ -107,11 +171,11 @@ function updateComment($postId, $id_comment, $comment)
  * @param string $id_comment  The Id of selected comment.
  * @param string $comment     The new text of the selected comment.
  */
-function deleteComment($postId, $id_comment, $comment)
+function deleteComment($postId, $id_comment)
 {
     $commentManager = new \Guillaume\miniBlog\Model\CommentManager(); // Creation d'une instance
     
-    $affectedLines = $commentManager->delComment($id_comment, $comment);
+    $affectedLines = $commentManager->delComment($id_comment);
 
     if ($affectedLines === false)
     {
