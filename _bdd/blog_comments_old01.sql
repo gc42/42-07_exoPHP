@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le :  lun. 12 mars 2018 à 14:55
+-- Généré le :  mer. 07 mars 2018 à 18:04
 -- Version du serveur :  5.7.19
 -- Version de PHP :  7.1.9
 
@@ -41,16 +41,16 @@ CREATE TABLE `blog_comments` (
 --
 
 INSERT INTO `blog_comments` (`id`, `id_post`, `author`, `comment`, `comment_date`) VALUES
+(1, 1, 'Guillaume', '1 Pas mal!', '2018-02-20 09:21:12'),
+(2, 1, 'Max', '1 Trop cool', '2018-02-21 17:21:12'),
+(3, 3, 'Guuillaume', '3 Genial!!', '2018-02-22 17:21:12'),
+(4, 4, 'GenXR', '4 patate', '2018-02-23 17:21:12'),
 (5, 2, 'Tronk', '2 Punaise', '2018-02-24 17:21:12'),
-(15, 1, 'Cagole', 'Face rayonante, c\'est toi qui nettoye ?', '2018-03-12 14:48:12'),
-(16, 1, 'GG', 'Trop cool perso je kiffe', '2018-03-12 09:36:46'),
-(19, 4, 'Toto', 'Voici le commentaire de Toto qui s\'affiche sur plusieurs lignes si Toto veut bien ne pas s\'arreter d\'ecrire;  si Toto veut bien ne pas s\'arreter d\'ecrire; si Toto veut bien ne pas s\'arreter d\'ecrire; si Toto veut bien ne pas s\'arreter d\'ecrire; si Toto veut bien ne pas s\'arreter d\'ecrire; si Toto veut bien ne pas s\'arreter d\'ecrire; ... Toto s\'arrete !', '2018-03-12 14:42:23'),
-(29, 4, 'Momo', 'Un autre commentaire, inutile lui aussi !', '2018-03-12 14:42:58'),
-(30, 3, 'Guilde des marchands', 'Le blocus de Corrusante est effectif. Rien ne doit pouvoir quitter la planete, meme l\'epice.', '2018-03-12 14:44:28'),
-(31, 3, 'Cino', 'Starwars sauce Dune, peut mieux faire Haha', '2018-03-12 14:45:13'),
-(32, 2, 'Clou', 'Faut s\'accrocher !', '2018-03-12 14:46:04'),
-(33, 2, 'Scotch', 'Ça glisse pas trop par ici ;-)', '2018-03-12 14:46:48'),
-(34, 1, 'Toutvenant', 'C\'est vraiment n\'importe-quoi ces commentaires... On dirait un vrai blog :D', '2018-03-12 14:49:07');
+(6, 4, 'H', '4 smugl', '2018-02-24 17:25:15'),
+(7, 4, 'K', '4 Kput', '2018-02-24 17:25:15'),
+(8, 4, 'TOTO', 'sdfgsdfg', '2018-03-07 17:10:19'),
+(9, 4, 'Moi', 'prout', '2018-03-07 17:10:36'),
+(10, 4, 'Toi', 'autres', '2018-03-07 17:12:01');
 
 --
 -- Index pour les tables déchargées
@@ -70,7 +70,7 @@ ALTER TABLE `blog_comments`
 -- AUTO_INCREMENT pour la table `blog_comments`
 --
 ALTER TABLE `blog_comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'identifiant du commentaire', AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'identifiant du commentaire', AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
