@@ -1,5 +1,5 @@
 <?php
-class Personnage
+class Personnage2
 {
     // LES ATTRIBUTS POUR LA BDD ################################################
     private $_id;
