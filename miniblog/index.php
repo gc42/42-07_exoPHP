@@ -179,6 +179,10 @@ try {       // DEBUT DES ESSAIS
                 throw new Exception('Impossible de supprimer le commentaire (rooter index.php/deleteComment)');
             }
         }
+        else
+        {
+            listPosts();
+        }
     }
     else
     {

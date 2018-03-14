@@ -15,10 +15,14 @@ class CommentManager extends Manager
         $db = $this->dbConnect();
     
         // Find related comments
-        $comments = $db->prepare('SELECT id AS id_comment, author, comment, DATE_FORMAT(comment_date, "%d/%b/%Y à %Hh%i et %s\'\'")  AS comment_date_fr
+        $comments = $db->prepare('SELECT
+        id AS id_comment,
+        author,
+        comment,
+        DATE_FORMAT(comment_date, "%d/%b/%Y à %Hh%i et %s\'\'")  AS comment_date_fr
         FROM blog_comments
         WHERE id_post = ?
-        ORDER BY comment_date DESC
+        ORDER BY comment_date
         LIMIT 0, 10
         ');
         $comments->execute(array($postId));
@@ -39,7 +43,10 @@ class CommentManager extends Manager
         $db = $this->dbConnect();
     
         // Find related comments
-        $editedComment = $db->prepare('SELECT id AS id_comment, author, comment
+        $editedComment = $db->prepare('SELECT
+        id AS id_comment,
+        author,
+        comment
         FROM blog_comments
         WHERE id = ?
         ');
@@ -61,7 +68,8 @@ class CommentManager extends Manager
     public function postComment($postId, $author, $comment)
     {
         $db = $this->dbConnect();
-        $comments = $db->prepare('INSERT INTO blog_comments (id_post, author, comment, comment_date) VALUES(:new_id, :new_author, :new_comment, NOW())');
+        $comments = $db->prepare('INSERT INTO blog_comments (id_post, author, comment, comment_date)
+                                  VALUES(:new_id, :new_author, :new_comment, NOW())');
         $affectedLines = $comments->execute(array(
             'new_id'      => $postId,
             'new_author'  => $author,
@@ -90,26 +98,15 @@ class CommentManager extends Manager
                                 WHERE id = :id_comment
                                 ');
         
-        // $modifiedcomment->bindParam('modif_comment', $comment,  PDO::PARAM_STR); // string
-        // $modifiedcomment->bindParam('id_comment', $id_comment,  PDO::PARAM_INT); // entier
-        // $affectedLines = $modifiedcomment->execute();
-        
-        $affectedLines = $modifiedcomment->execute(array(
-            'modif_comment' => $comment,
-            'id_comment' => $id_comment,
-        ));
-        
+        $modifiedcomment->bindParam('modif_comment', $comment,  PDO::PARAM_STR); // string
+        $modifiedcomment->bindParam('id_comment', $id_comment,  PDO::PARAM_INT); // entier
+
+        $affectedLines = $modifiedcomment->execute();
+       
         return $affectedLines;
     }
     
-/*
-//    UPDATE `blog_comments` SET `comment`="toto la brouhette", `comment_date`= NOW() WHERE id = 4
-//    
-UPDATE `blog_comments` SET 
-comment=:new_comment,
-comment_date = NOW()
-WHERE id = 4
-*/
+
 
 
     /**
@@ -121,8 +118,9 @@ WHERE id = 4
     public function delComment($id_comment)
     {
         $db = $this->dbConnect();
-        $comments = $db->prepare('DELETE FROM blog_comments WHERE id = :id_comment');
-        $affectedLines = $comments->execute(array(
+        $deletedcomment = $db->prepare('DELETE FROM blog_comments WHERE id = :id_comment');
+        
+        $affectedLines = $deletedcomment->execute(array(
             'id_comment' => $id_comment,
         ));
         

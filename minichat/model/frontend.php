@@ -29,7 +29,13 @@ function getPosts()
 	
 
 	// 2 : Request the 10 last posts 
-	$req = $db->query('SELECT pseudo, message, DATE_FORMAT(creation_date, "%d/%m/%Y &agrave; %Hh%i") AS date FROM minichat ORDER BY id DESC LIMIT 0, 10');
+	$req = $db->query('SELECT
+		pseudo,
+		message,
+		DATE_FORMAT(creation_date, "%d/%m/%Y &agrave; %Hh%i") AS date
+		FROM minichat
+		ORDER BY id DESC
+		LIMIT 0, 10');
 	// $request->closeCursor();
 	
     return $req;
