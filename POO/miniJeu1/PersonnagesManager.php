@@ -30,7 +30,8 @@ class PersonnagesManager
         // Préparation de la requête d'insertion.
         // Assignation des valeurs pour le nom du personnage.
         // Exécution de la requête.
-        $q = $this->_db->prepare('INSERT INTO personnages(nom) VALUES(:nom)');
+        $query = 'INSERT INTO personnages(nom) VALUES(:nom)';
+        $q = $this->_db->prepare($query);
         $q->bindValue(':nom', $perso->nom());
         $q->execute();
 
@@ -57,8 +58,8 @@ class PersonnagesManager
 
     public function delete(Personnage $perso)
     {
-        // Exécute une requête de type DELETE.
-        return $this->_db->exec('DELETE FROM personnages WHERE id = '.$perso->_id());
+        // Exécute une requête de type DELETE. Pas besoin de preparer car pas de donnees sensibles
+        return $this->_db->exec('DELETE FROM personnages WHERE id = '.$perso->id());
     }
 
 
@@ -94,6 +95,7 @@ class PersonnagesManager
         // Exécute une requête de type SELECT avec une clause WHERE, et retourne un objet Personnage.
         if (is_int($info))
         {
+            // $info etant ici un chiffre, c'est pas une donnee sensible, donc pas de requete preparee
             $q = $this->_db->query('SELECT id, nom, degats FROM personnages WHERE id ='.$info);
             $donnees = $q->fetch(PDO::FETCH_ASSOC);
 
@@ -103,6 +105,7 @@ class PersonnagesManager
         // Exécute une requête de type SELECT avec une clause WHERE, et retourne un objet Personnage.
         else
         {
+            // $info est ici un texte entre par le joueur, c'est sensible => requete preparee
             $q = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE nom = :nom');
             $q->execute([':nom' => $info]);
             $donnees = $q->fetch(PDO::FETCH_ASSOC);

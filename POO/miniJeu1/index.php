@@ -49,6 +49,7 @@ if (isset($_POST['creer']) && isset($_POST['nom'])) // Si on a voulu créer un p
 	}
 	else
 	{
+		// Si le nouveau nom est valide et non utilise, on ajoute a la DB
 		$manager->add($perso);
 	}
 }
@@ -82,9 +83,20 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 		else
 		{
 			$persoAFrapper = $manager->get((int) $_GET['frapper']);
-			
+//################# <DEBUG>
+			// echo '<pre>$persoAFrapper: '; print_r($persoAFrapper); echo '</pre>'; //################# DEBUG
+			// echo '<pre>$perso: '; print_r($perso); echo '</pre>'; //################# DEBUG
+//################# </DEBUG>
+
+
 			$retour = $perso->frapper($persoAFrapper); // On stocke dans $retour les éventuelles erreurs ou messages que renvoie la méthode frapper.
-			
+
+
+//################# <DEBUG>			
+			// echo 'retour: '; print_r($retour); //############################ DEBUG
+//################# </DEBUG>
+
+
 			switch ($retour)
 			{
 				case Personnage::CEST_MOI :
@@ -100,7 +112,7 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 					break;
 				
 				case Personnage::PERSONNAGE_TUE :
-					$message = 'Vous avez tué ce personnage !';
+					$message = 'Vous avez tué le personnage '.$persoAFrapper->nom().' !!';
 					
 					$manager->update($perso);
 					$manager->delete($persoAFrapper);
@@ -119,23 +131,42 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 	<meta charset="utf-8" />
 </head>
 <body>
-	<p>Nombre de personnages créés : <?= $manager->count() ?></p>
+	<p>Nombre de personnages créés : <?= $manager->count() ?>
+	<?php
+	// Pour lister les personnages qui existent deja
+				$persos = $manager->getList('0');
+
+				if (!empty($persos))
+				{
+					echo ' (';
+					foreach ($persos as $unPerso)
+					{
+						echo '<i>', htmlspecialchars($unPerso->nom()), '</i>, ';
+					}
+					echo ')<br /></p>';
+				}
+				?>
 <?php
 	if (isset($message)) // On a un message à afficher ?
 	{
-		echo '<p>', $message, '</p>'; // Si oui, on l'affiche.
+		echo '<p>Message: ', $message, '</p>'; // Si oui, on l'affiche.
+	}
+	else
+	{
+		echo '<p><i>Pas de message...</i></p>'; // Si pas de messages en attente.
 	}
 
 	if (isset($perso)) // Si on utilise un personnage (nouveau ou pas).
 	{
 ?>
-		<p><a href="?deconnexion=1">Déconnexion</a></p>
+		<p style="text-align:right"><a href="?deconnexion=1">Déconnexion</a></p>
 		
 		<fieldset>
 			<legend>Mes informations</legend>
 			<p>
 				Nom : <?= htmlspecialchars($perso->nom()) ?><br />
-				Dégâts : <?= $perso->degats() ?>
+				Dégâts : <?= $perso->degats() ?><br />
+				Id : <?= $perso->id() ?>
 			</p>
 		</fieldset>
 		
@@ -154,7 +185,7 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 				{
 				foreach ($persos as $unPerso)
 					{
-						echo '<a href="?frapper=', $unPerso->id(), '">', htmlspecialchars($unPerso->nom()), '</a> (dégâts : ', $unPerso->degats(), ')<br />';
+						echo '<a href="?frapper=', $unPerso->id(), '">', htmlspecialchars($unPerso->nom()), '</a> (id: ',$unPerso->id(),' dégâts : ', $unPerso->degats(), ')<br />';
 					}
 				}
 ?>
@@ -175,6 +206,14 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 <?php
 	}
 ?>
+
+<pre>GET:  <?= print_r($_GET);  ?></pre>
+<pre>POST: <?= print_r($_POST); ?></pre>
+<pre>$perso: <?= print_r($perso); ?></pre>
+<pre>$SESSION: <?= print_r($_SESSION); ?></pre>
+<pre>$persoAFrapper: <?= print_r($persoAFrapper); ?></pre>
+
+
 </body>
 </html>
 <?php

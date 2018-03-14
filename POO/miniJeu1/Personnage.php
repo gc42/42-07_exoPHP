@@ -1,11 +1,13 @@
 <?php
 class Personnage
 {
-    // LES ATTRIBUTS POUR LA BDD ################################################
+    // LES ATTRIBUTS ################################################
     private $_id,
             $_nom,
             $_degats;
     
+        
+    // LES CONSTANTES DE RETOUR D'ACTIONS ##############################
     const CEST_MOI = 1;
     const PERSONNAGE_TUE = 2;
     const PERSONNAGE_FRAPPE = 3;
@@ -15,6 +17,9 @@ class Personnage
     {
         $this->hydrate($donnees);
     }
+
+
+
 
     // ACTIONS ################################################
     public function frapper(Personnage $perso)
@@ -34,6 +39,8 @@ class Personnage
     }
     
     
+
+
     public function hydrate(array $donnees)
     {
         foreach ($donnees as $key => $value)
@@ -46,6 +53,7 @@ class Personnage
             }
         }
     }
+
 
 
 
@@ -65,10 +73,25 @@ class Personnage
     }
 
 
+
+
+    public function nomValide()
+    {
+      return !empty($this->_nom);
+    }
+
+
+
+
+
     // Liste des getters ################################################
     public function id()         { return $this->_id; }
     public function nom()        { return $this->_nom; }
     public function degats()     { return $this->_degats; }
+
+
+
+
 
 
     // Liste des setters ################################################
@@ -97,13 +120,4 @@ class Personnage
             $this->_degats = $degats;
         }
     }
-
-    
-
-
-    public function nomValide()
-    {
-      return !empty($this->_nom);
-    }
-
 }
