@@ -2,11 +2,11 @@
 class Personnage
 {
     // LES ATTRIBUTS ################################################
-    protected   $_id,
-                $_nom,
-                $_type,
-                $_degats,
-                $_atout,
+    protected   $id,
+                $nom,
+                $type,
+                $degats,
+                $atout,
                 $timeEndormi;
     
         
@@ -49,7 +49,7 @@ class Personnage
         // Avant tout : vérifier qu'on ne se frappe pas soi-même.
         // Si c'est le cas, on stoppe tout en 
         // renvoyant une valeur signifiant que le personnage ciblé est le personnage qui attaque.
-        if ($perso->getId() == $this->_id)
+        if ($perso->getId() == $this->id)
         {
             return self::CEST_MOI;
         }
@@ -87,10 +87,10 @@ class Personnage
     public function recevoirDegats()
     {
         // On augmente de 5 les dégâts.
-        $this->_degats += 5;
+        $this->degats += 5;
 
         // Si on a 100 de dégâts ou plus, la méthode renverra une valeur signifiant que le personnage a été tué.
-        if ($this->_degats >= 100)
+        if ($this->degats >= 100)
         {
             return self::PERSONNAGE_TUE;
         }
@@ -104,7 +104,7 @@ class Personnage
 
     public function nomValide()
     {
-      return !empty($this->_nom);
+      return !empty($this->nom);
     }
 
 
@@ -115,13 +115,13 @@ class Personnage
         $secondes = $this->timeEndormi;
         $secondes -= time();
 
-        $heures = floor($secondes / 3600);
+        $heures    = floor($secondes / 3600);
         $secondes -= $heures * 3600;
-        $minutes = floor($secondes / 60);
+        $minutes   = floor($secondes / 60);
         $secondes -= $minutes * 60;
 
-        $heures .= $heures <= 1 ? ' heure' : ' heures';
-        $minutes .= $minutes <= 1 ? ' minute' : ' minutes';
+        $heures .= $heures     <= 1 ? ' heure' : ' heures';
+        $minutes .= $minutes   <= 1 ? ' minute' : ' minutes';
         $secondes .= $secondes <= 1 ? ' seconde' : ' secondes';
 
         return $heures . ', ' . $minutes . ' et ' . $secondes;
@@ -135,7 +135,7 @@ class Personnage
     // Liste des getters ################################################
     public function getId()            { return $this->id; }
     public function getNom()           { return $this->nom; }
-    public function getType()         { return $this->type; }
+    public function getType()          { return $this->type; }
     public function getDegats()        { return $this->degats; }
     public function getAtout()         { return $this->atout; }
     public function getTimeEndormi()   { return $this->timeEndormi; }

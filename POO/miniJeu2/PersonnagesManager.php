@@ -138,7 +138,7 @@ class PersonnagesManager
         $persos = [];
 
         $q = $this->_db->prepare('SELECT
-            id, nom, degats, timeEndormi, atout
+            id, nom, degats, timeEndormi, atout, type
             FROM personnages
             WHERE nom <> :nom
             ORDER BY nom
@@ -147,13 +147,13 @@ class PersonnagesManager
         
         while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
         {
-            switch ($donnees['typt'])
+            switch ($donnees['type'])
             {
                 case 'guerrier': $persos[] = new Guerrier($donnees); break;
                 case 'magicien': $persos[] = new Magicien($donnees); break;
             }
         }
-
+        // echo '<pre>$manager getList: '; print_r($manager); echo '</pre>';
         return $persos;
     }
 

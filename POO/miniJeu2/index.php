@@ -54,7 +54,7 @@ if (isset($_POST['creer']) && isset($_POST['nom']))
 	}
 	// Si le type de personnage est valide, le personnage a ete cree
 	// Verifications
-	if ()
+	if (isset($perso))
 	{
 		// Si le nom n'est pas valide, on supprime le personnage
 		if (!$perso->nomValide())
@@ -62,12 +62,14 @@ if (isset($_POST['creer']) && isset($_POST['nom']))
 			$message = 'Le nom choisi est invalide.';
 			unset($perso); // Destruction du personnage
 		}
+
 		// Si le nom est deja pris, on supprime le personnage
-		elseif ($manager->exists($perso->nom()))
+		elseif ($manager->exists($perso->getNom()))
 		{
 			$message = 'Le nom du personnage est déjà pris.';
 			unset($perso); // Destruction du personnage
 		}
+
 		else
 		{
 			// Si OK, on ajoute le personnage dans la DB
@@ -144,7 +146,7 @@ elseif (isset($_GET['frapper']))
 					break;
 				
 				case Personnage::PERSONNAGE_TUE :
-					$message = 'Vous avez tué le personnage '.$persoAFrapper->nom().' !!';
+					$message = 'Vous avez tué le personnage '.$persoAFrapper->getNom().' !!';
 					
 					$manager->update($perso);
 					$manager->delete($persoAFrapper);
@@ -187,7 +189,7 @@ elseif (isset($_GET['ensorceler']))
 			else
 			{
 				$persoAEnsorceler = $manager->get((int) $_GET['ensorceler']);
-				retour = $perso->lancerUnSort($persoAEnsorceler);
+				$retour = $perso->lancerUnSort($persoAEnsorceler);
 	//################# <DEBUG>
 			// echo '<pre>$persoAEnsorceler: '; print_r($persoAEnsorceler); echo '</pre>'; //################# DEBUG
 			// echo '<pre>$perso: ';            print_r($perso);            echo '</pre>'; //################# DEBUG
@@ -237,21 +239,26 @@ elseif (isset($_GET['ensorceler']))
 </head>
 <body>
 	<p>Nombre de personnages créés : <?= $manager->count() ?>
-	<?php
+	
+<!-- ZONE PERSONNAGES EXISTANTS		 -->
+<?php
 	// Pour lister les personnages qui existent deja
-		$retourPersos = $manager->getList('0');
+	$retourPersos = $manager->getList('0');
 
-		if (!empty($retourPersos))
+	if (!empty($retourPersos))
+	{
+		echo ' (';
+		foreach ($retourPersos as $unPerso)
 		{
-			echo ' (';
-			foreach ($retourPersos as $unPerso)
-			{
-				echo '<i>', htmlspecialchars($unPerso->nom()), '</i>, ';
-			}
-			echo ')<br /></p>';
+			echo '<i>', htmlspecialchars($unPerso->getNom()), '</i>, ';
 		}
-	?>
+		echo ')<br /></p>';
+	}
+?>
 
+
+
+<!-- ZONE MESSAGES A AFFICHER		 -->
 <?php
 	if (isset($message)) // On a un message à afficher ?
 	{
@@ -266,33 +273,56 @@ elseif (isset($_GET['ensorceler']))
 	{
 ?>
 		<p style="text-align:right"><a href="?deconnexion=1">Déconnexion</a></p>
+
 		
+
+
+
+<!-- ZONE MES INFORMATIONS	SOUS FORME DE TABLEAU	 -->
 		<fieldset>
 			<legend>Mes informations</legend>
-			<p>
-				Type :   <?= ucfirst($perso->getType()) ?><br />
-				Nom :    <?= htmlspecialchars($perso->nom()) ?><br />
-				Dégâts : <?= $perso->degats() ?><br />
-				Id :     <?= $perso->id() ?>
+			<table>
+				<tr>
+					<td>Nom :</td>
+					<td><strong><?= htmlspecialchars($perso->getNom()) ?></strong></td>
+				</tr>
+				<tr>
+					<td>Type : </td>
+					<td><?= ucfirst($perso->getType()) ?></td>
+				</tr>
+				<tr>
+					<td>Dégâts :</td>
+					<td><?= $perso->getDegats() ?></td>
+				</tr>
+				<tr>
+					<td>
+				
 <?php
-				switch ($perso->getType())
-				{
-					case 'magicien':
-						echo 'Magie : ';
-						break;
+						switch ($perso->getType())
+						{
+							case 'magicien':
+								echo 'Magie : ';
+								break;
 
-					case 'guerrier':
-						echo 'Protection : ';
-						break;
-				}
-				echo $perso->getAtout();
+							case 'guerrier':
+								echo 'Protection : ';
+								break;
+						}
 ?>
-			</p>
+					</td>
+					<td><?= $perso->getAtout(); ?></td>
+				</tr>
+				<tr>
+					<td>Id :</td>
+					<td><?= $perso->getId() ?></td>
+				</tr>
+			</table>
 		</fieldset>
 		
 
 
 
+<!-- ZONE QUI ATTAQUER -->
 		<fieldset>
 			<legend>Qui attaquer ?</legend>
 			<p>
@@ -300,33 +330,57 @@ elseif (isset($_GET['ensorceler']))
 				// On récupère tous les personnages par ordre alphabétique,
 				// dont le nom est différent de celui de notre personnage
 				// (on va pas se frapper nous-même :p).
-				$retourPersos = $manager->getList($perso->nom());
-
+				$retourPersos = $manager->getList($perso->getNom());
+// ##########################   DEBUG
+				// echo '<pre>$manager: '; print_r($manager); echo '</pre>';
+				// echo '<pre>$retourPersos: '; print_r($retourPersos); echo '</pre>';
+				// echo '<pre>$perso: '; print_r($perso); echo '</pre>';
+				// echo '<pre>$perso: '; print_r($perso->getNom()); echo '</pre>';
+				// echo '<pre>$perso: '; print_r($perso->getNom()); echo '</pre>';
+// ##########################   DEBUG
 				if (empty($retourPersos))
 				{
-				echo 'Personne à frapper !';
+					echo 'Personne à frapper !';
 				}
 				else
 				{
-					if (perso->estEndormi())
+					if ($perso->estEndormi())
 					{
 						echo 'Vous etes endormi. Vous allez vous reveiller dans ', $perso->reveil(), '.';
 					}
 					else
 					{
+?>
+						<table>
+<?php
 						foreach ($retourPersos as $unPerso)
 						{
-							echo '<a href="?frapper=', $unPerso->id(), '">',
-								htmlspecialchars($unPerso->nom()), '</a>
-								(id: ',$unPerso->getId(),'| dégâts : ', $unPerso->getDegats(), '| type : ', $unPerso->getType(), ')<br />';
+?>
+							<tr>
+								<td>
+									<a href="?frapper= <?= $unPerso->getId(); ?>">
+									<?= htmlspecialchars($unPerso->getNom()); ?></a>
+								</td>
+								<td>
+								<?= $unPerso->getType() ?> | id: <?= $unPerso->getId(); ?> | dégâts: <?= $unPerso->getDegats() ?> 
+								</td>
+								<td>
 
-							// Ajout d'un lien pour lancer un sort si le personnage est un magicien
-							if ($perso->getType() == 'magicien')
-							{
-								echo ' | <a href="?ensorceler=', $unPerso->getId(), '">Lancer un sort</a>';
-							}
-							echo '<br />';
+									<!-- // Ajout d'un lien pour lancer un sort si le personnage est un magicien -->
+<?php							
+									if ($perso->getType() == 'magicien')
+									{
+										echo ' <a href="?ensorceler=', $unPerso->getId(), '">Lancer un sort</a>';
+									}
+								
+?>
+								</td>
+							<tr/>
+<?php
 						}
+?>
+						</table>;
+<?php
 					}
 				}
 ?>
