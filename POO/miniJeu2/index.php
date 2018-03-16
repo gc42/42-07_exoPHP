@@ -150,7 +150,7 @@ elseif (isset($_GET['frapper']))
 					
 					$manager->update($perso);
 					$manager->delete($persoAFrapper);
-				
+									
 					break;
 
 				case Personnage::PERSO_ENDORMI :
@@ -163,11 +163,11 @@ elseif (isset($_GET['frapper']))
 
 
 
-// Si on a cliqué sur un personnage pour l'ensorceler'.
+// Si on a cliqué sur 'Lancer un sort' pour ensorceler un personnage'.
 elseif (isset($_GET['ensorceler']))
 {
 
-	if (isset($perso))
+	if (!isset($perso))
 	{
 		$message = 'Merci de creer un personnage ou de vous identifier.';
 	}
@@ -202,7 +202,7 @@ elseif (isset($_GET['ensorceler']))
 						$message = 'Mais... pourquoi tu t\'ensorcelle toi meme ???';
 						break;
 
-					case Personnage::ENSORCELE :
+					case Personnage::PERSONNAGE_ENSORCELE :
 						$message = 'Le personnage a bien ete encorcele !';
 
 						$manager->update($perso);
@@ -346,7 +346,7 @@ elseif (isset($_GET['ensorceler']))
 				{
 					if ($perso->estEndormi())
 					{
-						echo 'Vous etes endormi. Vous allez vous reveiller dans ', $perso->reveil(), '.';
+						echo '<p style="color:red;">Vous etes endormi. Vous allez vous reveiller dans ', $perso->reveil(), '.</p>';
 					}
 					else
 					{
@@ -370,16 +370,22 @@ elseif (isset($_GET['ensorceler']))
 <?php							
 									if ($perso->getType() == 'magicien')
 									{
-										echo ' <a href="?ensorceler=', $unPerso->getId(), '">Lancer un sort</a>';
+										echo ' <a href="?ensorceler=', $unPerso->getId(), '">Lancer un sort sur ce quidam</a>';
 									}
 								
 ?>
+								</td>
+								<td>
+									<?= $unPerso->estEndormi() ? 'Dors encore ' : 'Reveillé'; ?>
+<?php
+									if($unPerso->estEndormi()) { echo $unPerso->reveil(); }
+?> 
 								</td>
 							<tr/>
 <?php
 						}
 ?>
-						</table>;
+						</table>
 <?php
 					}
 				}

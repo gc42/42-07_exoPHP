@@ -5,9 +5,9 @@ class Magicien extends Personnage
 	{
 		// Valeur de l'atout en fonction des degats du personnage
 		if     ($this->degats >= 0 && $this->degats <= 25)	{ $this->atout = 4; }
-		elseif ($this->degats > 25 && $this->degats <= 50)	{ $this->atout = 3; }
-		elseif ($this->degats > 50 && $this->degats <= 75)	{ $this->atout = 2; }
-		elseif ($this->degats > 75 && $this->degats <= 90)	{ $this->atout = 1; }
+		elseif ($this->degats >= 25 && $this->degats < 50)	{ $this->atout = 3; }
+		elseif ($this->degats >= 50 && $this->degats < 75)	{ $this->atout = 2; }
+		elseif ($this->degats >= 75 && $this->degats < 90)	{ $this->atout = 1; }
 		else  { $this->atout = 0; }
 
 		if ($perso->id == $this->id)
@@ -25,7 +25,7 @@ class Magicien extends Personnage
 		return self::PERSO_ENDORMI;
 		}
 
-		$perso->timeEndormi = time() + ($this->atout * 6) * 3600;
+		$perso->timeEndormi = time() + ($this->atout * 1) * 6;  // Temps d'endormissement (* 6 * 3600 = 6 heures)
 
 		return self::PERSONNAGE_ENSORCELE;
 	}
