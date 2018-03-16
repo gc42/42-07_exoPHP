@@ -2,7 +2,7 @@
 class Personnage
 {
     // LES ATTRIBUTS ################################################
-    private $_id,
+    protected $_id,
             $_nom,
             $_degats;
     
