@@ -32,29 +32,56 @@ if (isset($_SESSION['perso'])) // Si la session perso existe, on restaure l'obje
 	$perso = $_SESSION['perso'];
 }
 
-if (isset($_POST['creer']) && isset($_POST['nom'])) // Si on a voulu créer un personnage.
-{
-	$perso = new Personnage(['nom' => $_POST['nom']]); // On crée un nouveau personnage.
 
-	// On verifie si les data saisies sont valides
-	if (!$perso->nomValide())
+
+
+// Si on a voulu créer un personnage.
+if (isset($_POST['creer']) && isset($_POST['nom'])) 
+{
+	switch ($_POST['type'])
 	{
-		$message = 'Le nom choisi est invalide.';
-		unset($perso); // Destruction du personnage
+		case 'magicien':
+			$perso = new Magicien(['nom' => $_POST['nom']]);
+			break;
+		
+		case 'guerrier':
+			$perso = new Guerrier(['nom' => $_POST['nom']]);
+			break;
+
+		default :
+			$message = 'Le type du personnage est invalide.';
+			break;
 	}
-	elseif ($manager->exists($perso->nom()))
+	// Si le type de personnage est valide, le personnage a ete cree
+	// Verifications
+	if ()
 	{
-		$message = 'Le nom du personnage est déjà pris.';
-		unset($perso); // Destruction du personnage
-	}
-	else
-	{
-		// Si le nouveau nom est valide et non utilise, on ajoute a la DB
-		$manager->add($perso);
+		// Si le nom n'est pas valide, on supprime le personnage
+		if (!$perso->nomValide())
+		{
+			$message = 'Le nom choisi est invalide.';
+			unset($perso); // Destruction du personnage
+		}
+		// Si le nom est deja pris, on supprime le personnage
+		elseif ($manager->exists($perso->nom()))
+		{
+			$message = 'Le nom du personnage est déjà pris.';
+			unset($perso); // Destruction du personnage
+		}
+		else
+		{
+			// Si OK, on ajoute le personnage dans la DB
+			$manager->add($perso);
+		}
 	}
 }
 
-elseif (isset($_POST['utiliser']) && isset($_POST['nom'])) // Si on a voulu utiliser un personnage.
+
+
+
+
+// Si on a voulu utiliser un personnage.
+elseif (isset($_POST['utiliser']) && isset($_POST['nom'])) 
 {
 	if ($manager->exists($_POST['nom'])) // Si celui-ci existe.
 	{
@@ -66,7 +93,12 @@ elseif (isset($_POST['utiliser']) && isset($_POST['nom'])) // Si on a voulu util
 	}
 }
 
-elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le frapper.
+
+
+
+
+// Si on a cliqué sur un personnage pour le frapper.
+elseif (isset($_GET['frapper'])) 
 {
 	if (!isset($perso))
 	{
@@ -83,18 +115,18 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 		else
 		{
 			$persoAFrapper = $manager->get((int) $_GET['frapper']);
-//################# <DEBUG>
+	//################# <DEBUG>
 			// echo '<pre>$persoAFrapper: '; print_r($persoAFrapper); echo '</pre>'; //################# DEBUG
 			// echo '<pre>$perso: '; print_r($perso); echo '</pre>'; //################# DEBUG
-//################# </DEBUG>
+	//################# </DEBUG>
+
+			// On stocke dans $retour les éventuelles erreurs ou messages que renvoie la méthode frapper.
+			$retour = $perso->frapper($persoAFrapper);
 
 
-			$retour = $perso->frapper($persoAFrapper); // On stocke dans $retour les éventuelles erreurs ou messages que renvoie la méthode frapper.
-
-
-//################# <DEBUG>			
+	//################# <DEBUG>			
 			// echo 'retour: '; print_r($retour); //############################ DEBUG
-//################# </DEBUG>
+	//################# </DEBUG>
 
 
 			switch ($retour)
@@ -118,10 +150,83 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 					$manager->delete($persoAFrapper);
 				
 					break;
+
+				case Personnage::PERSO_ENDORMI :
+					$message = 'Vous etes endormi, vous ne pouvez pas frapper de personnage !';
+					break;
 			}
 		}
 	}
 }
+
+
+
+// Si on a cliqué sur un personnage pour l'ensorceler'.
+elseif (isset($_GET['ensorceler']))
+{
+
+	if (isset($perso))
+	{
+		$message = 'Merci de creer un personnage ou de vous identifier.';
+	}
+
+	else
+	{
+		// Verifier que le personnage est un magicien
+		if ($perso->getType() != 'magicien')
+		{
+			$message = 'Seuls les magiciens peuvent ensorceler les personnages !';
+		}
+
+		else
+		{
+			if (!$manager->exists((int) $_GET['ensorceler']))
+			{
+				$message = 'Le personnage que vous voulez frapper n\'existe pas !';
+			}
+			else
+			{
+				$persoAEnsorceler = $manager->get((int) $_GET['ensorceler']);
+				retour = $perso->lancerUnSort($persoAEnsorceler);
+	//################# <DEBUG>
+			// echo '<pre>$persoAEnsorceler: '; print_r($persoAEnsorceler); echo '</pre>'; //################# DEBUG
+			// echo '<pre>$perso: ';            print_r($perso);            echo '</pre>'; //################# DEBUG
+			// echo 'retour: ';                 print_r($retour);                          //############################ DEBUG
+	//################# </DEBUG>
+
+				switch ($retour)
+				{
+					case Personnage::CEST_MOI :
+						$message = 'Mais... pourquoi tu t\'ensorcelle toi meme ???';
+						break;
+
+					case Personnage::ENSORCELE :
+						$message = 'Le personnage a bien ete encorcele !';
+
+						$manager->update($perso);
+						$manager->update($persoAEnsorceler);
+						break;
+
+					case Personnage::PAS_DE_MAGIE :
+						$message = 'Vous n\'avez pas assez de magie';
+						break;
+
+					case Personnage::PERSO_ENDORMI:
+						$message = 'Vous etes endormi, vous ne pouvez pas lancer de sort !';
+						break;
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -134,18 +239,19 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 	<p>Nombre de personnages créés : <?= $manager->count() ?>
 	<?php
 	// Pour lister les personnages qui existent deja
-				$persos = $manager->getList('0');
+		$retourPersos = $manager->getList('0');
 
-				if (!empty($persos))
-				{
-					echo ' (';
-					foreach ($persos as $unPerso)
-					{
-						echo '<i>', htmlspecialchars($unPerso->nom()), '</i>, ';
-					}
-					echo ')<br /></p>';
-				}
-				?>
+		if (!empty($retourPersos))
+		{
+			echo ' (';
+			foreach ($retourPersos as $unPerso)
+			{
+				echo '<i>', htmlspecialchars($unPerso->nom()), '</i>, ';
+			}
+			echo ')<br /></p>';
+		}
+	?>
+
 <?php
 	if (isset($message)) // On a un message à afficher ?
 	{
@@ -164,33 +270,73 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 		<fieldset>
 			<legend>Mes informations</legend>
 			<p>
-				Nom : <?= htmlspecialchars($perso->nom()) ?><br />
+				Type :   <?= ucfirst($perso->getType()) ?><br />
+				Nom :    <?= htmlspecialchars($perso->nom()) ?><br />
 				Dégâts : <?= $perso->degats() ?><br />
-				Id : <?= $perso->id() ?>
+				Id :     <?= $perso->id() ?>
+<?php
+				switch ($perso->getType())
+				{
+					case 'magicien':
+						echo 'Magie : ';
+						break;
+
+					case 'guerrier':
+						echo 'Protection : ';
+						break;
+				}
+				echo $perso->getAtout();
+?>
 			</p>
 		</fieldset>
 		
+
+
+
 		<fieldset>
-			<legend>Qui frapper ?</legend>
+			<legend>Qui attaquer ?</legend>
 			<p>
 <?php
-				$persos = $manager->getList($perso->nom());
+				// On récupère tous les personnages par ordre alphabétique,
+				// dont le nom est différent de celui de notre personnage
+				// (on va pas se frapper nous-même :p).
+				$retourPersos = $manager->getList($perso->nom());
 
-				if (empty($persos))
+				if (empty($retourPersos))
 				{
 				echo 'Personne à frapper !';
 				}
-
 				else
 				{
-				foreach ($persos as $unPerso)
+					if (perso->estEndormi())
 					{
-						echo '<a href="?frapper=', $unPerso->id(), '">', htmlspecialchars($unPerso->nom()), '</a> (id: ',$unPerso->id(),' dégâts : ', $unPerso->degats(), ')<br />';
+						echo 'Vous etes endormi. Vous allez vous reveiller dans ', $perso->reveil(), '.';
+					}
+					else
+					{
+						foreach ($retourPersos as $unPerso)
+						{
+							echo '<a href="?frapper=', $unPerso->id(), '">',
+								htmlspecialchars($unPerso->nom()), '</a>
+								(id: ',$unPerso->getId(),'| dégâts : ', $unPerso->getDegats(), '| type : ', $unPerso->getType(), ')<br />';
+
+							// Ajout d'un lien pour lancer un sort si le personnage est un magicien
+							if ($perso->getType() == 'magicien')
+							{
+								echo ' | <a href="?ensorceler=', $unPerso->getId(), '">Lancer un sort</a>';
+							}
+							echo '<br />';
+						}
 					}
 				}
 ?>
 			</p>
 		</fieldset>
+
+
+
+
+
 <?php
 	}
 	else
@@ -199,8 +345,13 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 		<form action="" method="post">
 			<p>
 				Nom : <input type="text" name="nom" maxlength="50" />
-				<input type="submit" value="Créer ce personnage" name="creer" />
 				<input type="submit" value="Utiliser ce personnage" name="utiliser" />
+				Type :
+				<select name="type">
+					<option value="magicien">Magicien</option>
+					<option value="guerrier">Guerrier</option>
+				</select>
+				<input type="submit" value="Créer ce personnage" name="creer" />
 			</p>
 		</form>
 <?php
@@ -212,6 +363,7 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 <pre>$perso: <?= print_r($perso); ?></pre>
 <pre>$SESSION: <?= print_r($_SESSION); ?></pre>
 <pre>$persoAFrapper: <?= print_r($persoAFrapper); ?></pre>
+<pre>$persoAEnsorceler: <?= print_r($persoAEnsorceler); ?></pre>
 
 
 </body>
