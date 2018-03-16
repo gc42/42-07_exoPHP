@@ -30,15 +30,17 @@ class PersonnagesManager
         // Préparation de la requête d'insertion.
         // Assignation des valeurs pour le nom du personnage.
         // Exécution de la requête.
-        $query = 'INSERT INTO personnages(nom) VALUES(:nom)';
+        $query = 'INSERT INTO personnages(nom, type) VALUES(:nom, :type)';
         $q = $this->_db->prepare($query);
-        $q->bindValue(':nom', $perso->nom());
+        $q->bindValue(':nom',  $perso->getNom());
+        $q->bindValue(':type', $perso->getType());
         $q->execute();
 
         // Hydratation du personnage passé en paramètre avec assignation de son identifiant et des dégâts initiaux (= 0).
         $perso->hydrate([
             'id' => $this->_db->lastInsertId(),
             'degats' => 0,
+            'atout'  => 0,
         ]);
     }
 
@@ -96,21 +98,32 @@ class PersonnagesManager
         if (is_int($info))
         {
             // $info etant ici un chiffre, c'est pas une donnee sensible, donc pas de requete preparee
-            $q = $this->_db->query('SELECT id, nom, degats FROM personnages WHERE id ='.$info);
-            $donnees = $q->fetch(PDO::FETCH_ASSOC);
+            $q = $this->_db->query('SELECT
+                id, nom, degats, timeEndormi, type, atout
+                FROM personnages
+                WHERE id ='.$info);
+            $perso = $q->fetch(PDO::FETCH_ASSOC);
 
-            return new Personnage($donnees);
         }
         // Sinon, on veut récupérer le personnage avec son nom.
         // Exécute une requête de type SELECT avec une clause WHERE, et retourne un objet Personnage.
         else
         {
             // $info est ici un texte entre par le joueur, c'est sensible => requete preparee
-            $q = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE nom = :nom');
+            $q = $this->_db->prepare('SELECT
+                id, nom, degats, timeEndormi, type, atout
+                FROM personnages
+                WHERE nom = :nom
+                ');
             $q->execute([':nom' => $info]);
-            $donnees = $q->fetch(PDO::FETCH_ASSOC);
+            $perso = $q->fetch(PDO::FETCH_ASSOC);
+        }
 
-            return new Personnage($donnees);
+        switch ($perso['type'])
+        {
+            case 'guerrier': return new Guerrier($perso);
+            case 'magicien': return new Magicien($perso);
+            default: return null;
         }
     }
 
@@ -124,12 +137,21 @@ class PersonnagesManager
         // Le résultat sera un tableau d'instances de Personnage.
         $persos = [];
 
-        $q = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE nom <> :nom ORDER BY nom');
+        $q = $this->_db->prepare('SELECT
+            id, nom, degats, timeEndormi, atout
+            FROM personnages
+            WHERE nom <> :nom
+            ORDER BY nom
+            ');
         $q->execute([':nom' => $nom]);
         
         while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
         {
-            $persos[] = new Personnage($donnees);
+            switch ($donnees['typt'])
+            {
+                case 'guerrier': $persos[] = new Guerrier($donnees); break;
+                case 'magicien': $persos[] = new Magicien($donnees); break;
+            }
         }
 
         return $persos;
@@ -142,11 +164,19 @@ class PersonnagesManager
     public function update(Personnage $perso)
     {
         // Prépare une requête de type UPDATE.
-        $q = $this->_db->prepare('UPDATE personnages SET degats = :degats WHERE id = :id');
+        $q = $this->_db->prepare('UPDATE personnages
+            SET
+            degats      = :degats,
+            timeEndormi = :timeEndormi,
+            atout       = :atout
+            WHERE id = :id
+            ');
         
         // Assignation des valeurs à la requête.
-        $q->bindValue(':degats', $perso->degats(), PDO::PARAM_INT);
-        $q->bindValue(':id',     $perso->id(),     PDO::PARAM_INT);
+        $q->bindValue(':degats',      $perso->degats(),       PDO::PARAM_INT);
+        $q->bindValue(':timeEndormi', $perso->timeEndormi(),  PDO::PARAM_INT);
+        $q->bindValue(':atout',       $perso->atout(),        PDO::PARAM_INT);
+        $q->bindValue(':id',          $perso->id(),           PDO::PARAM_INT);
         
         // Exécution de la requête.
         $q->execute();
