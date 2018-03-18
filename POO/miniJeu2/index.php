@@ -189,33 +189,41 @@ elseif (isset($_GET['ensorceler']))
 			else
 			{
 				$persoAEnsorceler = $manager->get((int) $_GET['ensorceler']);
-				$retour = $perso->lancerUnSort($persoAEnsorceler);
+
+				if ($persoAEnsorceler->estEndormi())
+				{
+					$message = 'Le personnage est deja endormi, patienter avant de l\'achever !!';
+				}
+				else
+				{
+					$retour = $perso->lancerUnSort($persoAEnsorceler);
 	//################# <DEBUG>
 			// echo '<pre>$persoAEnsorceler: '; print_r($persoAEnsorceler); echo '</pre>'; //################# DEBUG
 			// echo '<pre>$perso: ';            print_r($perso);            echo '</pre>'; //################# DEBUG
 			// echo 'retour: ';                 print_r($retour);                          //############################ DEBUG
 	//################# </DEBUG>
 
-				switch ($retour)
-				{
-					case Personnage::CEST_MOI :
-						$message = 'Mais... pourquoi tu t\'ensorcelle toi meme ???';
-						break;
+					switch ($retour)
+					{
+						case Personnage::CEST_MOI :
+							$message = 'Mais... pourquoi tu t\'ensorcelle toi meme ???';
+							break;
 
-					case Personnage::PERSONNAGE_ENSORCELE :
-						$message = 'Le personnage a bien ete encorcele !';
+						case Personnage::PERSONNAGE_ENSORCELE :
+							$message = 'Le personnage a bien ete encorcele !';
 
-						$manager->update($perso);
-						$manager->update($persoAEnsorceler);
-						break;
+							$manager->update($perso);
+							$manager->update($persoAEnsorceler);
+							break;
 
-					case Personnage::PAS_DE_MAGIE :
-						$message = 'Vous n\'avez pas assez de magie';
-						break;
+						case Personnage::PAS_DE_MAGIE :
+							$message = 'Vous n\'avez pas assez de magie';
+							break;
 
-					case Personnage::PERSO_ENDORMI:
-						$message = 'Vous etes endormi, vous ne pouvez pas lancer de sort !';
-						break;
+						case Personnage::PERSO_ENDORMI:
+							$message = 'Vous etes endormi, vous ne pouvez pas lancer de sort !';
+							break;
+					}
 				}
 			}
 		}
@@ -240,6 +248,10 @@ elseif (isset($_GET['ensorceler']))
 <body>
 	<p>Nombre de personnages créés : <?= $manager->count() ?>
 	
+
+
+
+
 <!-- ZONE PERSONNAGES EXISTANTS		 -->
 <?php
 	// Pour lister les personnages qui existent deja
@@ -254,21 +266,11 @@ elseif (isset($_GET['ensorceler']))
 		}
 		echo ')<br /></p>';
 	}
-?>
 
 
 
-<!-- ZONE MESSAGES A AFFICHER		 -->
-<?php
-	if (isset($message)) // On a un message à afficher ?
-	{
-		echo '<p>Message: ', $message, '</p>'; // Si oui, on l'affiche.
-	}
-	else
-	{
-		echo '<p><i>Pas de message...</i></p>'; // Si pas de messages en attente.
-	}
 
+	// SI LE PERSONNAGE EXISTE
 	if (isset($perso)) // Si on utilise un personnage (nouveau ou pas).
 	{
 ?>
@@ -278,7 +280,7 @@ elseif (isset($_GET['ensorceler']))
 
 
 
-<!-- ZONE MES INFORMATIONS	SOUS FORME DE TABLEAU	 -->
+<!-- ZONE "MES INFORMATIONS"	SOUS FORME DE TABLEAU	 -->
 		<fieldset>
 			<legend>Mes informations</legend>
 			<table>
@@ -322,14 +324,13 @@ elseif (isset($_GET['ensorceler']))
 
 
 
-<!-- ZONE QUI ATTAQUER -->
+<!-- ZONE "QUI ATTAQUER" -->
 		<fieldset>
 			<legend>Qui attaquer ?</legend>
 			<p>
 <?php
 				// On récupère tous les personnages par ordre alphabétique,
-				// dont le nom est différent de celui de notre personnage
-				// (on va pas se frapper nous-même :p).
+				// dont le nom est différent de celui de notre personnage.
 				$retourPersos = $manager->getList($perso->getNom());
 // ##########################   DEBUG
 				// echo '<pre>$manager: '; print_r($manager); echo '</pre>';
@@ -344,6 +345,7 @@ elseif (isset($_GET['ensorceler']))
 				}
 				else
 				{
+					// Si 'mon' personnage est endormi
 					if ($perso->estEndormi())
 					{
 						echo '<p style="color:red;">Vous etes endormi. Vous allez vous reveiller dans ', $perso->reveil(), '.</p>';
@@ -351,6 +353,7 @@ elseif (isset($_GET['ensorceler']))
 					else
 					{
 ?>
+						<!-- TABLEAU "QUI ATTAQUER" -->
 						<table>
 <?php
 						foreach ($retourPersos as $unPerso)
@@ -368,9 +371,13 @@ elseif (isset($_GET['ensorceler']))
 
 									<!-- // Ajout d'un lien pour lancer un sort si le personnage est un magicien -->
 <?php							
-									if ($perso->getType() == 'magicien')
+									if ($perso->getType() == 'magicien' && !$unPerso->estEndormi())
 									{
 										echo ' <a href="?ensorceler=', $unPerso->getId(), '">Lancer un sort sur ce quidam</a>';
+									}
+									else
+									{
+										echo 'Patienter sans s\'acharner !';
 									}
 								
 ?>
@@ -378,14 +385,18 @@ elseif (isset($_GET['ensorceler']))
 								<td>
 									<?= $unPerso->estEndormi() ? 'Dors encore ' : 'Reveillé'; ?>
 <?php
-									if($unPerso->estEndormi()) { echo $unPerso->reveil(); }
+									// Affichage du temps de dodo restant
+									if ($unPerso->estEndormi())
+									{
+										echo $unPerso->reveil();
+									}
 ?> 
 								</td>
 							<tr/>
 <?php
 						}
 ?>
-						</table>
+						</table> <!-- FIN DU TABLEAU -->
 <?php
 					}
 				}
@@ -397,11 +408,35 @@ elseif (isset($_GET['ensorceler']))
 
 
 
+
+<!-- ZONE "MESSAGES" A AFFICHER		 -->
+		<fieldset>
+			<legend>Messages</legend>
 <?php
-	}
-	else
+		if (isset($message)) // On a un message à afficher ?
+		{
+			echo '<p style="color:red;">' . $message . '</p>'; // Si oui, on l'affiche.
+		}
+		else
+		{
+			echo '<p><i>Pas de message...</i></p>'; // Si pas de messages en attente.
+		}
+?>
+
+
+		</fieldset>
+
+
+
+
+
+<?php
+	}  // FIN DE 'SI LE PERSONNAGE EXISTE'
+
+	else  // SI AUCUN PERSONNAGE n'EST SELECTIONNE
 	{
 ?>
+<!-- ZONE FORMULAIRE DE DEBUT DE JEU --> 
 		<form action="" method="post">
 			<p>
 				Nom : <input type="text" name="nom" maxlength="50" />
@@ -418,16 +453,23 @@ elseif (isset($_GET['ensorceler']))
 	}
 ?>
 
+
+
+
+<!-- ############### DEBUG ######################### -->
 <pre>GET:  <?= print_r($_GET);  ?></pre>
 <pre>POST: <?= print_r($_POST); ?></pre>
 <pre>$perso: <?= print_r($perso); ?></pre>
 <pre>$SESSION: <?= print_r($_SESSION); ?></pre>
 <pre>$persoAFrapper: <?= print_r($persoAFrapper); ?></pre>
 <pre>$persoAEnsorceler: <?= print_r($persoAEnsorceler); ?></pre>
+<!-- ############### DEBUG ######################### -->
+
 
 
 </body>
 </html>
+<!-- MISE A JOUR DE LA VARIABLE DE SESSION -->
 <?php
 if (isset($perso)) // Si on a créé un personnage, on le stocke dans une variable session afin d'économiser une requête SQL.
 {

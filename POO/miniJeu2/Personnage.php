@@ -33,7 +33,7 @@ class Personnage
     }
 
 
-
+ 
 
     // ACTIONS ################################################
     public function estEndormi()
@@ -120,11 +120,15 @@ class Personnage
         $minutes   = floor($secondes / 60);
         $secondes -= $minutes * 60;
 
-        $heures .= $heures     <= 1 ? ' heure' : ' heures';
-        $minutes .= $minutes   <= 1 ? ' minute' : ' minutes';
+        if ($heures == 0) { $heures = ''; }
+        else { $heures .= $heures     <= 1 ? ' heure, ' : ' heures, '; }
+        
+        if ($minutes == 0) { $minutes = ''; }
+        else {$minutes .= $minutes   <= 1 ? ' minute et ' : ' minutes et '; }
+        
         $secondes .= $secondes <= 1 ? ' seconde' : ' secondes';
 
-        return $heures . ', ' . $minutes . ' et ' . $secondes;
+        return $heures . $minutes . $secondes;
     }
 
 
