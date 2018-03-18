@@ -7,7 +7,7 @@ function chargerClasse($classname)
 
 spl_autoload_register('chargerClasse');
 
-
+ 
 
 // SESSION
 session_start(); // On appelle session_start() APRÈS avoir enregistré l'autoload.
