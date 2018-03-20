@@ -1,8 +1,8 @@
 <?php
-namespace App; // Le namespace courant pou cette page
-use \PDO;      // Indique dans quel namespace chercher PDO
+namespace App\Database; // Le namespace courant pou cette page
+use \PDO;               // Indique dans quel namespace chercher PDO
 
-class Database
+class MysqlDatabase extends Database
 {
 
 	private $db_name;
@@ -15,16 +15,18 @@ class Database
 	{
 		$this->db_name  = $db_name;
 		$this->db_user  = $db_user;
-		$this->ddb_pass = $db_pass;
+		$this->db_pass  = $db_pass;
 		$this->db_host  = $db_host;
 	}
+
+
 
 	
 	private function getPDO()
 	{
 		if ($this->pdo === null)
 		{
-			$pdo = new PDO('mysql:host='.$this->db_host.';dbname='.$this->db_name, $this->db_user, $this->ddb_pass);
+			$pdo = new PDO('mysql:host='.$this->db_host.';dbname='.$this->db_name, $this->db_user, $this->db_pass);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // On émet une alerte à chaque fois qu'une requête a échoué.
 			$this->pdo = $pdo;
 		}
@@ -32,10 +34,19 @@ class Database
 		return $this->pdo;
 	}
 
-	public function query($statement, $class_name, $one = false)
+
+
+
+	public function query($statement, $class_name = null, $one = false)
 	{
 		$req = $this->getPDO()->query($statement);
-		$req->setFetchMode(PDO::FETCH_CLASS, $class_name);
+		if ($class_name === null)
+		{
+			$req->setFetchMode(PDO::FETCH_OBJ);
+		} else {
+			$req->setFetchMode(PDO::FETCH_CLASS, $class_name);
+		}
+
 		if($one)
 		{
 			$datas = $req->fetch();
@@ -47,6 +58,9 @@ class Database
 		return $datas;
 	}
 
+
+
+	
 	public function prepare($statement, $attributes, $class_name, $one = false)
 	{
 		$req = $this->getPDO()->prepare($statement);

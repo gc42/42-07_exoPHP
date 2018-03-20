@@ -13,9 +13,16 @@ function printGC($mixed = null)
 }
 
 $app = App\App::getInstance();
-printGC($app->getTable('Users'));
-printGC($app->getTable('Posts'));
-printGC($app->getTable('categories'));
+
+// printGC($app->getTable('Users'));
+// printGC($app->getTable('Posts'));
+// printGC($app->getTable('categories'));
+
+
+
+
+$posts = $app->getTable('Posts');
+printGC($posts->all());
 
 
 /*
@@ -37,7 +44,7 @@ echo $app->title;
   
 
 
-
+ 
 
 
 
