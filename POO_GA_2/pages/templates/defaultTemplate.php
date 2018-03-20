@@ -6,8 +6,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
-
-    <title><?= App\App::getTitle(); ?></title>
+    <?php $app = App\App::getInstance(); ?>
+    <title><?= $app->title; ?></title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">

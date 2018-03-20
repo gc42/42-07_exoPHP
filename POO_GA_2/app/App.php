@@ -2,16 +2,57 @@
 namespace App;
 class App
 {
-	private static $database;
-	private static $title = 'Mon blog GA';
+	public $title = "Mon site GA";
+	private static $_instance;
+	private $db_instance;
+	
+		
+	// MISE EN PLACE DU 'SIGLETON', pour que la class App ne soit instanciée qu'une fois
+	public static function getInstance()
+	{
+		if (is_null(self::$_instance))
+		{
+			self::$_instance = new App();
+		}
+		return self::$_instance;
+	}
 
-	const DB_NAME = 'test';
-	const DB_USER = 'root';
-	const DB_PASS = 'toto';
-	const DB_HOST = 'localhost';
 
 
 
+	// TROUVE LE NOM DE LA TABLE A PARTIR DU NOM PASSE EN PARAMETRE
+	public function getTable($name)
+	{
+		$class_name = '\\App\\Table\\' . ucfirst($name) . 'Table';
+		return new $class_name();
+	}
+
+
+
+	// GESTION DE LA BDD
+	public function getDB()
+	{
+		$config = Config::getInstance();
+		if (is_null($this->db_instance))
+		{
+			$this->db_instance = new Database($config->get('db_name'), $config->get('db_user'), $config->get('db_pass'), $config->get('db_host'));
+		}
+		return $this->db_instance;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+// ANCIEN CODE... N'EST PLUS UTILISE
+/*
 	public static function getDb()
 	{
 		if (self::$database === null)
@@ -40,4 +81,5 @@ class App
 	{
 		self::$title = $title . '|' . self::$title;
 	}
+*/
 }
