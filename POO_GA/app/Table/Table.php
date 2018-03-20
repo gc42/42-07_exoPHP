@@ -36,11 +36,12 @@ class Table
 	 */
 	public static function find($id)
 	{
-		return App::getDb()->prepare("
+		// return App::getDb()->prepare("
+		return static::query("
 		SELECT *
 		FROM ".static::getTable()."
 		WHERE id = ?
-		", [$id], get_called_class(), true);
+		", [$id], true);
 	}
 
 

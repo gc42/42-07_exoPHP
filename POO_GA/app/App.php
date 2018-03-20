@@ -2,6 +2,8 @@
 namespace App;
 class App
 {
+	private static $database;
+	private static $title = 'Mon blog GA';
 
 	const DB_NAME = 'test';
 	const DB_USER = 'root';
@@ -9,7 +11,6 @@ class App
 	const DB_HOST = 'localhost';
 
 
-	private static $database;
 
 	public static function getDb()
 	{
@@ -26,5 +27,17 @@ class App
 	{
 		header("HTTP/1.0 404 Not Found");
 		header('Location:index.php?p=404');
+	}
+
+
+
+	public static function getTitle()
+	{
+		return self::$title;
+	}
+
+	public static function setTitle($title)
+	{
+		self::$title = $title . '|' . self::$title;
 	}
 }

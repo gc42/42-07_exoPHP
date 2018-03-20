@@ -10,8 +10,10 @@ if ($post === false)
 {
 	App::notFound();
 }
+// Set le titre de la page
+App::setTitle($post->titre);
 
-$categorie = Categorie::find($post->category_id);
+// $categorie = Categorie::find($post->category_id);
 ?>
 
 <h1>My Single article page</h1>
@@ -23,7 +25,7 @@ $categorie = Categorie::find($post->category_id);
 
 		<h2><?= ucfirst($post->titre); ?></h2>
 
-		<p><em><?= ucfirst($categorie->titre); ?></em></p>
+		<p><em><?= ucfirst($post->categorie); ?></em></p>
 
 		<p><?= $post->contenu; ?></p>
 

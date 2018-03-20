@@ -4,6 +4,20 @@ namespace App\Table;
 
 class Article extends Table
 {
+
+	protected static $table = 'articles';
+
+	public static function find($id)
+	{
+		// return App::getDb()->prepare("
+		return static::query("
+		SELECT articles.id, articles.titre, articles.contenu, categories.titre as categorie
+		FROM articles
+		LEFT JOIN categories ON category_id = categories.id
+		WHERE articles.id = ?
+		", [$id], true);
+	}
+
 	/**
 	 * 
 	 */
@@ -12,8 +26,8 @@ class Article extends Table
 		$results = self::query("
 			SELECT articles.id, articles.titre, articles.contenu, categories.titre as categorie
 			FROM articles
-			LEFT JOIN categories
-				ON category_id = categories.id
+			LEFT JOIN categories ON category_id = categories.id
+			ORDER BY articles.date DESC
 			");
 
 		return $results;
@@ -29,6 +43,7 @@ class Article extends Table
 			FROM articles
 			LEFT JOIN categories ON category_id = categories.id
 			WHERE category_id = ?
+			ORDER BY articles.date DESC
 			", [$category_id]);
 
 		return $results;
