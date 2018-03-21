@@ -11,7 +11,7 @@ if ($categorie === false)
 }
 
 
-$articles    = Article::getLastByCategorie($_GET['id']);
+$articles    = Article::getLastPostsByCategorie($_GET['id']);
 $categories  = Categorie::all();
 
 // echo'<pre>$categorie: ';  var_dump($categorie);  echo '</pre>';

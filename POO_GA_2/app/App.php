@@ -1,16 +1,34 @@
 <?php
-namespace App;
+// namespace App; // Il a choisi de ne pas utiliser de namespace pour App
+use Core\Config;
+use Core\Database\MysqlDatabase;
+
+
 class App
 {
 	public $title = "Mon site GA";
 	private static $_instance;
 	private $db_instance;
 	
+	
+	
+	public static function load()
+	{
+		session_start();
+
+		require ROOT . '/app/Autoloader.php';
+		App\Autoloader::register();
 		
+		require ROOT . '/core/Autoloader.php';
+		Core\Autoloader::register();
+	}
+
+
+
 	// MISE EN PLACE DU 'SIGLETON', pour que la class App ne soit instanciée qu'une fois
 	public static function getInstance()
 	{
-		if (is_null(self::$_instance))
+		if (self::$_instance === null)
 		{
 			self::$_instance = new App();
 		}
@@ -32,10 +50,10 @@ class App
 	// GESTION DE LA BDD
 	public function getDB()
 	{
-		$config = Config::getInstance();
+		$config = Config::getInstance(ROOT . '/config/config.php');
 		if (is_null($this->db_instance))
 		{
-			$this->db_instance = new \App\Database\MysqlDatabase($config->get('db_name'), $config->get('db_user'), $config->get('db_pass'), $config->get('db_host'));
+			$this->db_instance = new MysqlDatabase($config->get('db_name'), $config->get('db_user'), $config->get('db_pass'), $config->get('db_host'));
 		}
 		return $this->db_instance;
 	}

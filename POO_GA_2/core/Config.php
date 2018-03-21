@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Core;
 
 class Config
 {
@@ -11,21 +11,21 @@ class Config
 
 
 	// MISE EN PLACE DU 'SIGLETON', pour que class Config ne soit instancié qu'une fois
-	public static function getInstance()
+	public static function getInstance($file)
 	{
 		if (is_null(self::$_instance))
 		{
-			self::$_instance = new Config();
+			self::$_instance = new Config($file);
 		}
 		return self::$_instance;
 	}
 
 
 
-	// RECUP DE LA 'CONFIG' DANS '$this->settings'
-	public function __construct()
+	// RECUP DE LA 'CONFIG' puis stockage dans '$this->settings'
+	public function __construct($file)
 	{
-		$this->settings = require dirname(__DIR__) . '/config/config.php';  // CHARGE LE FICHIER CONFIG DANS LE ARRAY
+		$this->settings = require($file);  // CHARGE LE FICHIER CONFIG DANS LE ARRAY VIDE '$settings'
 	}
 
 

@@ -1,7 +1,6 @@
 <?php
-use App\App;
-use App\Table\Categorie;
-use App\Table\Article;
+
+
 ?>
 
 <h1>My Home page</h1>
@@ -10,7 +9,7 @@ use App\Table\Article;
 
 <div class="row">
 	<div class="col-sm-8">
-		<?php foreach (Article::getLast() as $post): ?>
+		<?php foreach (App::getInstance()->getTable('Post')->getLastPosts() as $post): ?>
 
 			<h2><a href=" <?= $post->url; ?>" ><?= ucfirst($post->titre); ?></a></h2>
 
@@ -26,7 +25,7 @@ use App\Table\Article;
 	<div class="col-sm-4"> <!-- AFFICHAGE COLONNE DE DROITE -->
 		<ul>
 		
-			<?php foreach(Categorie::all() as $categorie): ?>
+			<?php foreach(App::getInstance()->getTable('Category')->all() as $categorie): ?>
 				<li>
 					<!-- <?php echo'<pre>$categorie: '; var_dump($categorie); echo '</pre>'; ?> -->
 					<a href="<?= $categorie->url; ?>"><?= $categorie->titre; ?></a>

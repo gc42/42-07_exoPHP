@@ -1,6 +1,63 @@
 <?php
-require '../app/Autoloader.php';
-App\Autoloader::register();
+define('ROOT', dirname(__DIR__));
+
+require ROOT .'/app/App.php';
+App::load();
+
+
+
+
+if (isset($_GET['p']))
+{
+	$page = $_GET['p'];
+} else {
+	$page = 'home';
+}
+
+ob_start();
+		switch ($p) :
+			case 'home' :
+				require ROOT . '/pages/posts/home.php'; break;
+
+			case 'posts.show' :
+				require ROOT . '/pages/posts/show.php'; break;
+				
+			case 'posts.category' :
+				require ROOT . '/pages/posts/categorie.php'; break;
+				
+			case '404' :
+				require ROOT . '/pages/404.php'; break;
+				
+			default :
+				require ROOT . '/pages/posts/home.php';
+		endswitch;
+
+$content = ob_get_clean();
+
+
+require ROOT . '/pages/templates/defaultTemplate.php';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// $app = App::getInstance();
+// $posts = $app->getTable('Posts');
+// printGC($posts->all());
+
+
+
+
 
 // AMELIORATION DE print_r()
 function printGC($mixed = null)
@@ -12,17 +69,7 @@ function printGC($mixed = null)
 	return null;
 }
 
-$app = App\App::getInstance();
 
-// printGC($app->getTable('Users'));
-// printGC($app->getTable('Posts'));
-// printGC($app->getTable('categories'));
-
-
-
-
-$posts = $app->getTable('Posts');
-printGC($posts->all());
 
 
 /*

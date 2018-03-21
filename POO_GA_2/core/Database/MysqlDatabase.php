@@ -1,5 +1,5 @@
 <?php
-namespace App\Database; // Le namespace courant pou cette page
+namespace Core\Database; // Le namespace courant pou cette page
 use \PDO;               // Indique dans quel namespace chercher PDO
 
 class MysqlDatabase extends Database

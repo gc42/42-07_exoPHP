@@ -6,8 +6,13 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
-    <?php $app = App\App::getInstance(); ?>
-    <title><?= $app->title; ?></title>
+
+
+    <title><?= App::getInstance()->title; ?></title>
+
+
+
+
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
@@ -15,6 +20,10 @@
     <!-- Custom styles for this template -->
     <link href="starter-template.css" rel="stylesheet">
   </head>
+
+
+
+
 
   <body>
 
@@ -28,8 +37,14 @@
 
       <div class="starter-template" style="padding-top: 100px;">
 
+
+
+
 		<?= $content; ?>
-		
+
+    
+
+    
       </div>
 
     </main><!-- /.container -->
