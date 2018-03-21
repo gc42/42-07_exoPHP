@@ -10,21 +10,15 @@ class App
 	private static $_instance;
 	private $db_instance;
 	
-	
-	
-	public static function load()
-	{
-		session_start();
 
-		require ROOT . '/app/Autoloader.php';
-		App\Autoloader::register();
-		
-		require ROOT . '/core/Autoloader.php';
-		Core\Autoloader::register();
+
+	private function __construct()
+	{
+		echo 'prout';
 	}
 
-
-
+	
+	
 	// MISE EN PLACE DU 'SIGLETON', pour que la class App ne soit instanciée qu'une fois
 	public static function getInstance()
 	{
@@ -34,6 +28,23 @@ class App
 		}
 		return self::$_instance;
 	}
+	
+	
+	
+	public static function load()
+	{
+		session_start();
+
+		require ROOT . '/app/Autoloader.php';
+		\App\Autoloader::register();
+		
+		require ROOT . '/core/Autoloader.php';
+		\Core\Autoloader::register();
+	}
+
+
+
+	
 
 
 
@@ -60,29 +71,7 @@ class App
 
 
 
-
-
-
-
-
-
-
-
-
-// ANCIEN CODE... N'EST PLUS UTILISE
-/*
-	public static function getDb()
-	{
-		if (self::$database === null)
-		{
-			self::$database = new Database(self::DB_NAME, self::DB_USER, self::DB_PASS, self::DB_HOST);
-		}
-		return self::$database;
-	}
-
-
-
-	public static function notFound()
+	public function notFound()
 	{
 		header("HTTP/1.0 404 Not Found");
 		header('Location:index.php?p=404');
@@ -90,14 +79,4 @@ class App
 
 
 
-	public static function getTitle()
-	{
-		return self::$title;
-	}
-
-	public static function setTitle($title)
-	{
-		self::$title = $title . '|' . self::$title;
-	}
-*/
 }

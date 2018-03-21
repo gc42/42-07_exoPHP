@@ -29,7 +29,7 @@
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-           <a class="nav-link" href="#">Link</a>
+           <a class="nav-link" href="index.php">Home</a>
      </div>
     </nav>
 

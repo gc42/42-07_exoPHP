@@ -56,14 +56,12 @@ class Table
 	 * Recupere l'article selectionne
 	 * @return array
 	 */
-	public static function findPost($id)
+	public function find($id)
 	{
-		
 		$results =  $this->query("
-			SELECT articles.id, articles.titre, articles.contenu, categories.titre as categorie
-			FROM articles
-			LEFT JOIN categories ON category_id = categories.id
-			WHERE articles.id = ?
+			SELECT *
+			FROM {$this->table}
+			WHERE id = ?
 			",
 			[$id],
 			true

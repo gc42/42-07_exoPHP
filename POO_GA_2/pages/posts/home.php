@@ -13,7 +13,7 @@
 
 			<h2><a href=" <?= $post->url; ?>" ><?= ucfirst($post->titre); ?></a></h2>
 
-			<p><em><?= $post->categorie; ?></em></p>
+			<p><em><?= $post->category; ?></em></p>
 
 			<p><?= $post->extrait; ?></p>
 

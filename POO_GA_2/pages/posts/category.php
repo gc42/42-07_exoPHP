@@ -1,22 +1,18 @@
 <?php
 
-use App\App;
-use App\Table\Article;
-use App\Table\Categorie;
+$app = App::getInstance();
 
-$categorie   = Categorie::find($_GET['id']);
+$categorie = $app->getTable('Category')->find($_GET['id']);
 if ($categorie === false)
 {
-	App::notFound();
+	$app->notFound();
 }
 
 
-$articles    = Article::getLastPostsByCategorie($_GET['id']);
-$categories  = Categorie::all();
+$articles    = $app->getTable('Post')->getLastPostsByCategory($_GET['id']);
+$categories  = $app->getTable('Category')->all();
 
-// echo'<pre>$categorie: ';  var_dump($categorie);  echo '</pre>';
-// echo'<pre>$categories: '; var_dump($categories); echo '</pre>';
-// echo'<pre>$article: ';    var_dump($articles);   echo '</pre>';
+
 
 ?>
 
@@ -32,7 +28,9 @@ $categories  = Categorie::all();
 
 			<h2><a href=" <?= $post->url; ?>" ><?= ucfirst($post->titre); ?></a></h2>
 
-			<p><em><?= ucfirst($post->categorie); ?></em></p>
+			<!-- <?= printGC($post); ?> -->
+
+			<p><em><?= ucfirst($post->category); ?></em></p>
 
 			<p><?= $post->extrait; ?></p>
 

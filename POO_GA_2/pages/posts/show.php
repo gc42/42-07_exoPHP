@@ -20,7 +20,7 @@
 
 		<h2><?= ucfirst($post->titre); ?></h2>
 
-		<p><em><?= ucfirst($post->categorie); ?></em></p>
+		<p><em><?= ucfirst($post->category); ?></em></p>
 
 		<p><?= $post->contenu; ?></p>
 
