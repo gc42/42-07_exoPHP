@@ -28,6 +28,9 @@ ob_start();
 		case '404' :
 			require ROOT . '/pages/404.php'; break;
 			
+		case 'login' :
+			require ROOT . '/pages/users/login.php'; break;
+			
 		default :
 			require ROOT . '/pages/posts/home.php';
 	endswitch;

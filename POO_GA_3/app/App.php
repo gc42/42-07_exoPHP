@@ -11,12 +11,12 @@ class App
 	private $db_instance;
 	
 
-
+/*
 	private function __construct()
 	{
 		echo 'prout';
 	}
-
+*/
 	
 	
 	// MISE EN PLACE DU 'SIGLETON', pour que la class App ne soit instanciée qu'une fois
@@ -44,8 +44,6 @@ class App
 
 
 
-	
-
 
 
 
@@ -70,13 +68,21 @@ class App
 	}
 
 
-
+	// ERREUR SI LA PAGE EST INTROUVABLE
 	public function notFound()
 	{
 		header("HTTP/1.0 404 Not Found");
-		header('Location:index.php?p=404');
+		// header('Location:index.php?p=404');
+		die('Page introuvable');
 	}
 
 
-
+	// ERREUR SI L'ACCES A LA PAGE EST INTERDIT
+	public function forbidden()
+	{
+		header("HTTP/1.0 403 Forbidden");
+		print_r($_POST);
+		print_r($_SESSION);
+		die('Acces interdit');
+	}
 }
