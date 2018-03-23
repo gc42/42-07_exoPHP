@@ -7,7 +7,7 @@ if (!empty($_POST))
 		// die ('You are connected'); // Juste pour tester si ca marche
 		header('Location: admin.php');
 	} else {
-		// die ('Not connected'); // Juste pour tester si ca marche
+		// die ('Not connected bastard !!'); // Juste pour tester si ca marche
 ?>
 		<div class="alert alert-danger">
 			Identifiants incorrects

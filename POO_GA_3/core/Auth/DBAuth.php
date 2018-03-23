@@ -49,11 +49,12 @@ class DBAuth
 				return true;
 			}
 		}
+
 		return false;
 	}
 
 	public function logged()
 	{
-		return isset($_SESSION['auth']); // Return 'true' if user is identified
+		return isset($_SESSION['Auth']); // Return 'true' if user is identified
 	}
 }

@@ -81,8 +81,9 @@ class App
 	public function forbidden()
 	{
 		header("HTTP/1.0 403 Forbidden");
-		print_r($_POST);
-		print_r($_SESSION);
+		print_r($_POST); echo '<br>';
+		print_r($_SESSION); echo '<br>';
+		
 		die('Acces interdit');
 	}
 }
