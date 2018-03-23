@@ -54,6 +54,7 @@ class Table
 
 	/**
 	 * Recupere l'article selectionne
+	 * @param int $id L'id de l'article selectionne
 	 * @return array
 	 */
 	public function find($id)
@@ -68,6 +69,48 @@ class Table
 		);
 
 		return $results;
+	}
+
+
+
+	/**
+	 * Update l'article mofifié
+	 * @param int $id L'id de l'article selectionne
+	 * @param array $fields Les champs a mettre a jour
+	 * @return array
+	 */
+	public function update($id, $fields)
+	{
+		$sql_parts  = []; // tableau vide
+		$attributes = []; // tableau vide
+		foreach ($fields as $k => $v)
+		{
+			$sql_parts[]  = "$k = ?";
+			$attributes[] = $v;
+		}
+		$attributes[] = $id;
+
+		$sql_part = implode(', ', $sql_parts);
+		
+		printGC($sql_part);
+		
+		$results =  $this->query("UPDATE {$this->table} SET $sql_part WHERE id = ?", $attributes, true);
+		
+		return $results;
+	}
+
+
+
+	public function extractList($key, $value)
+	{
+		$records =$this->all();
+		$return = [];
+		foreach($records as $v)
+		{
+			$return[$v->$key] = $v->$value;
+		}
+
+		return $return;
 	}
 
 

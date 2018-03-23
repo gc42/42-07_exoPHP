@@ -42,7 +42,16 @@ ob_start();
 			
 		case 'posts.category' :
 			require ROOT . '/pages/admin/posts/category.php'; break;
+
+		case 'posts.edit' :
+			require ROOT . '/pages/admin/posts/edit.php'; break;
+
 			
+
+
+
+
+
 		case '404' :
 			require ROOT . '/pages/404.php'; break;
 			

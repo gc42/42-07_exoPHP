@@ -30,9 +30,9 @@ class PostTable extends Table
 	/**
 	 * Recupere un seul article grace a son 'id' en liant la categorie associee
 	 * @param $id int
-	 * @return \App\Entity\Entity  (ie: un objet de la class Entity)
+	 * @return \App\Entity\PostEntity  (ie: un objet de la class Entity)
 	 */
-	public function find($id)
+	public function findWithCategory($id)
 	{
 		$results = $this->query("
 			SELECT articles.id, articles.titre, articles.contenu, articles.date, categories.titre as category

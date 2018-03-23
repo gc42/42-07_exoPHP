@@ -43,7 +43,12 @@ class Form
 	 */
 	protected function getValue($index)
 	{
-		return isset($this->data[$index]) ? $this->data[$index] : null;
+		if (is_object($this->data))
+		{
+			return $this->data->$index; // Si data est un objet, transformation en tableau
+		} 
+	
+		return isset($this->data[$index]) ? $this->data[$index] : null; // Dans les autres cas,  un tableau...
 	}
 
 
